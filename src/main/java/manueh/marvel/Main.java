@@ -57,7 +57,7 @@ public class Main
 
         @Override
         public ItemStack makeIcon() {
-            return ItemInit.URU_INGOT.get().getDefaultInstance();
+            return ItemInit.MJOLNIR.get().getDefaultInstance();
         }
     }
 

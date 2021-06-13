@@ -3,16 +3,21 @@ package manueh.marvel.client;
 import manueh.marvel.Main;
 import manueh.marvel.core.init.ItemInit;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.IItemPropertyGetter;
+import net.minecraft.item.ItemModelsProperties;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
@@ -30,6 +35,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import sun.util.resources.cldr.kea.TimeZoneNames_kea;
 
+import javax.annotation.Nullable;
+
 @Mod.EventBusSubscriber(modid = Main.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientEvents {
 
@@ -37,7 +44,7 @@ public class ClientEvents {
     public static void activateFly(final TickEvent.PlayerTickEvent event) {
         PlayerEntity player = event.player;
         if(player != null) {
-            if(player.getItemBySlot(EquipmentSlotType.CHEST).getStack().sameItemStackIgnoreDurability(ItemInit.IRONMAN_CHESTPLATE.get().getDefaultInstance())) {
+            if(player.getItemBySlot(EquipmentSlotType.HEAD).getStack().sameItemStackIgnoreDurability(ItemInit.IRONMAN_HELMET.get().getDefaultInstance()) && player.getItemBySlot(EquipmentSlotType.CHEST).getStack().sameItemStackIgnoreDurability(ItemInit.IRONMAN_CHESTPLATE.get().getDefaultInstance()) && player.getItemBySlot(EquipmentSlotType.LEGS).getStack().sameItemStackIgnoreDurability(ItemInit.IRONMAN_LEGGINS.get().getDefaultInstance()) && player.getItemBySlot(EquipmentSlotType.FEET).getStack().sameItemStackIgnoreDurability(ItemInit.IRONMAN_BOOTS.get().getDefaultInstance())) {
                 player.abilities.mayfly = true;
                 changeFlySpeed(player,0.05001f);
             }else {
@@ -63,10 +70,9 @@ public class ClientEvents {
         if(player != null) {
             if(player.getItemInHand(Hand.MAIN_HAND).sameItemStackIgnoreDurability(ItemInit.MJOLNIR.get().getDefaultInstance())) {
                 player.fallDistance = 0;
-                player.abilities.setWalkingSpeed(0.5f);
-                //player.lerpMotion(player.getLookAngle().x, player.getDeltaMovement().y, player.getLookAngle().z);
+                player.abilities.setWalkingSpeed(0.06f);
             }else {
-                player.abilities.setWalkingSpeed(0.1f);
+                player.abilities.setWalkingSpeed(0.1F);
             }
         }
     }
@@ -79,8 +85,9 @@ public class ClientEvents {
         }
         if(player != null) {
             if (player.getItemInHand(Hand.MAIN_HAND).sameItemStackIgnoreDurability(ItemInit.MJOLNIR.get().getDefaultInstance())) {
-                for (int i=0;i<5;i++) {
-                    player.lerpMotion(player.getLookAngle().x, player.getDeltaMovement().y + 0.1f, player.getLookAngle().z);
+                for (int i=0;i<10;i++) {
+                    player.lerpMotion(player.getLookAngle().x, player.getDeltaMovement().y + 0.05f, player.getLookAngle().z);
+                    player.push(player.getLookAngle().x, 0, player.getLookAngle().z);
                 }
 
             }

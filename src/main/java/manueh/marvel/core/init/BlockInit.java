@@ -25,4 +25,9 @@ public class BlockInit {
                     MaterialColor.COLOR_LIGHT_GRAY).strength(50f, 600f)
                     .requiresCorrectToolForDrops().harvestTool(ToolType.PICKAXE).harvestLevel(3)
                     .sound(SoundType.METAL)));
+    public static final RegistryObject<Block> TITANIUM_ORE = BLOCKS.register("titanium_ore",
+            () -> new Block(AbstractBlock.Properties.of(Material.METAL,
+                    MaterialColor.COLOR_LIGHT_GRAY).strength(50f, 120f)
+                    .requiresCorrectToolForDrops().harvestTool(ToolType.PICKAXE).harvestLevel(2)
+                    .sound(SoundType.METAL)));
 }

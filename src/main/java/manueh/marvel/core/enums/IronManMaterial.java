@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 
 public enum IronManMaterial implements IArmorMaterial {
     IRONMAN_ARMOR(Main.MODID + ":" + "ironman", 25, new int[] { 4, 7, 9, 4 }, 17, SoundEvents.ARMOR_EQUIP_CHAIN, 4f, 0.2f,
-            () -> Ingredient.of(ItemInit.URU_INGOT.get()));
+            () -> Ingredient.of(ItemInit.TITANIUM_INGOT.get()));
 
     private static final int[] baseDurability = { 128, 144, 160, 112 };
     private final String name;

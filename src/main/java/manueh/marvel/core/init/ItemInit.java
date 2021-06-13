@@ -1,6 +1,7 @@
 package manueh.marvel.core.init;
 
 import manueh.marvel.Main;
+import manueh.marvel.common.items.CaptainAmericaShield;
 import manueh.marvel.common.items.IronManArmor;
 import manueh.marvel.common.items.mjolnir;
 import manueh.marvel.core.enums.IronManMaterial;
@@ -39,15 +40,24 @@ public class ItemInit {
             () -> new Item(new Item.Properties().tab(Main.GROUP)));
     //MJOLNIR
     public static final RegistryObject<Item> MJOLNIR = ITEMS.register("mjolnir",
-            () -> new mjolnir(ItemTier.DIAMOND,8,-1.5f, new Item.Properties().tab(Main.GROUP)));
+            () -> new mjolnir(ItemTier.DIAMOND,8,-1.5f, new Item.Properties().tab(Main.GROUP).durability(800).setNoRepair()));
 
 
     //IRON_MAN
+    //MATERIAL
+    public static final RegistryObject<BlockItem> TITANIUM_ORE = ITEMS.register("titanium_ore",
+            () -> new BlockItem(BlockInit.TITANIUM_ORE.get(), new Item.Properties().tab(Main.GROUP)));
+    //INGOT
+    public static final RegistryObject<Item> TITANIUM_INGOT = ITEMS.register("titanium_ingot",
+            () -> new Item(new Item.Properties().tab(Main.GROUP)));
     //ARMOR
     public static final RegistryObject<Item> IRONMAN_HELMET = ITEMS.register("ironman_helmet", () -> new IronManArmor(IronManMaterial.IRONMAN_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().tab(Main.GROUP)));
-    public static final RegistryObject<Item> IRONMAN_CHESTPLATE = ITEMS.register("ironman_chestplate", () -> new IronManArmor(IronManMaterial.IRONMAN_ARMOR, EquipmentSlotType.CHEST, new Item.Properties().tab(Main.GROUP)));
+    public static final RegistryObject<Item> IRONMAN_CHESTPLATE = ITEMS.register("ironman_chestplate.json", () -> new IronManArmor(IronManMaterial.IRONMAN_ARMOR, EquipmentSlotType.CHEST, new Item.Properties().tab(Main.GROUP)));
     public static final RegistryObject<Item> IRONMAN_LEGGINS = ITEMS.register("ironman_leggins", () -> new IronManArmor(IronManMaterial.IRONMAN_ARMOR, EquipmentSlotType.LEGS, new Item.Properties().tab(Main.GROUP)));
     public static final RegistryObject<Item> IRONMAN_BOOTS = ITEMS.register("ironman_boots", () -> new IronManArmor(IronManMaterial.IRONMAN_ARMOR, EquipmentSlotType.FEET, new Item.Properties().tab(Main.GROUP)));
 
+
+    //CAPTAIN AMERICA
+    //public static final RegistryObject<Item> CAPTAIN_AMERICA_SHIELD = ITEMS.register("captain_america_shield", () -> new CaptainAmericaShield(new Item.Properties().tab(Main.GROUP)));
 
 }
