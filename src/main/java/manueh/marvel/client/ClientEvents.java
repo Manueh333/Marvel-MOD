@@ -4,22 +4,37 @@ import manueh.marvel.Main;
 import manueh.marvel.core.init.ItemInit;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import sun.util.resources.cldr.kea.TimeZoneNames_kea;
 
 @Mod.EventBusSubscriber(modid = Main.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientEvents {
 
     @SubscribeEvent
-    public static void ChangeArmor(final TickEvent.PlayerTickEvent event) {
+    public static void activateFly(final TickEvent.PlayerTickEvent event) {
         PlayerEntity player = event.player;
         if(player != null) {
             if(player.getItemBySlot(EquipmentSlotType.CHEST).getStack().sameItemStackIgnoreDurability(ItemInit.IRONMAN_CHESTPLATE.get().getDefaultInstance())) {
@@ -40,4 +55,36 @@ public class ClientEvents {
     public static void changeFlySpeed(PlayerEntity player, float speed) {
         player.abilities.setFlyingSpeed(speed);
     }
+
+    @SubscribeEvent
+    public static void MjolnirOnHand(final TickEvent.PlayerTickEvent event) {
+
+        PlayerEntity player = event.player;
+        if(player != null) {
+            if(player.getItemInHand(Hand.MAIN_HAND).sameItemStackIgnoreDurability(ItemInit.MJOLNIR.get().getDefaultInstance())) {
+                player.fallDistance = 0;
+                player.abilities.setWalkingSpeed(0.5f);
+                //player.lerpMotion(player.getLookAngle().x, player.getDeltaMovement().y, player.getLookAngle().z);
+            }else {
+                player.abilities.setWalkingSpeed(0.1f);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void jumpMjolnir(final LivingEvent.LivingJumpEvent event) {
+        PlayerEntity player = null;
+        if(event.getEntity().is(Minecraft.getInstance().player)) {
+            player = (PlayerEntity) event.getEntity();
+        }
+        if(player != null) {
+            if (player.getItemInHand(Hand.MAIN_HAND).sameItemStackIgnoreDurability(ItemInit.MJOLNIR.get().getDefaultInstance())) {
+                for (int i=0;i<5;i++) {
+                    player.lerpMotion(player.getLookAngle().x, player.getDeltaMovement().y + 0.1f, player.getLookAngle().z);
+                }
+
+            }
+        }
+    }
+
 }

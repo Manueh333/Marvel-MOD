@@ -1,5 +1,6 @@
 package manueh.marvel.common.items;
 
+import manueh.marvel.core.init.ItemInit;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
@@ -33,7 +34,12 @@ public class IronManArmor extends ArmorItem {
         boolean sneakPressed = Screen.hasShiftDown();
 
         if(sneakPressed) {
-            tooltip.add(new TranslationTextComponent("tooltip.marvel.ironman"));
+            if(stack.sameItemStackIgnoreDurability(ItemInit.IRONMAN_CHESTPLATE.get().getDefaultInstance())) {
+                tooltip.add(new TranslationTextComponent("tooltip.marvel.ironman_chestplate"));
+            }
+            else {
+                tooltip.add(new TranslationTextComponent("tooltip.marvel.ironman_armor"));
+            }
         }else {
             tooltip.add(new TranslationTextComponent("tooltip.marvel.hold_shift"));
         }
