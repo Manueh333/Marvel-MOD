@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smithing",
+  "base": {
+    "item": "minecraft:blaze_rod"
+  },
+  "addition": {
+    "item": "minecraft:quartz"
+  },
+  "result": {
+    "item": "marvel:star_core"
+  }
+}

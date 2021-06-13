@@ -1,0 +1,52 @@
+package manueh.marvel.core.init;
+
+import manueh.marvel.Main;
+import manueh.marvel.common.items.mjolnir;
+import manueh.marvel.core.enums.IronManMaterial;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.*;
+import net.minecraftforge.common.ToolType;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistryEntry;
+
+public class ItemInit {
+
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Main.MODID);
+
+    //THOR
+    //ORE
+    public static final RegistryObject<BlockItem> URU_ORE = ITEMS.register("uru_ore",
+            () -> new BlockItem(BlockInit.URU_ORE.get(), new Item.Properties().tab(Main.GROUP)));
+    //NUGGET
+    public static final RegistryObject<Item> URU_NUGGET = ITEMS.register("uru_nugget",
+            () -> new Item(new Item.Properties().tab(Main.GROUP)));
+    //INGOT
+    public static final RegistryObject<Item> URU_INGOT = ITEMS.register("uru_ingot",
+            () -> new Item(new Item.Properties().tab(Main.GROUP)));
+    //BLOCK
+    public static final RegistryObject<BlockItem> URU_BLOCK = ITEMS.register("uru_block",
+            () -> new BlockItem(BlockInit.URU_BLOCK.get(), new Item.Properties().tab(Main.GROUP)));
+    //STAR
+    public static final RegistryObject<Item> STAR = ITEMS.register("star",
+            () -> new Item(new Item.Properties().tab(Main.GROUP)));
+    public static final RegistryObject<Item> STAR_CORE = ITEMS.register("star_core",
+            () -> new Item(new Item.Properties().tab(Main.GROUP)));
+    //HANDLE
+    public static final RegistryObject<Item> MJOLNIR_HANDLE = ITEMS.register("mjolnir_handle",
+            () -> new Item(new Item.Properties().tab(Main.GROUP)));
+    //MJOLNIR
+    public static final RegistryObject<Item> MJOLNIR = ITEMS.register("mjolnir",
+            () -> new mjolnir(ItemTier.DIAMOND,8,-1.5f, new Item.Properties().tab(Main.GROUP)));
+
+
+    //IRON_MAN
+    //ARMOR
+    public static final RegistryObject<Item> IRONMAN_HELMET = ITEMS.register("ironman_helmet", () -> new ArmorItem(IronManMaterial.IRONMAN_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().tab(Main.GROUP)));
+    public static final RegistryObject<Item> IRONMAN_CHESTPLATE = ITEMS.register("ironman_chestplate", () -> new ArmorItem(IronManMaterial.IRONMAN_ARMOR, EquipmentSlotType.CHEST, new Item.Properties().tab(Main.GROUP)));
+    public static final RegistryObject<Item> IRONMAN_LEGGINS = ITEMS.register("ironman_leggins", () -> new ArmorItem(IronManMaterial.IRONMAN_ARMOR, EquipmentSlotType.LEGS, new Item.Properties().tab(Main.GROUP)));
+    public static final RegistryObject<Item> IRONMAN_BOOTS = ITEMS.register("ironman_boots", () -> new ArmorItem(IronManMaterial.IRONMAN_ARMOR, EquipmentSlotType.FEET, new Item.Properties().tab(Main.GROUP)));
+
+
+}

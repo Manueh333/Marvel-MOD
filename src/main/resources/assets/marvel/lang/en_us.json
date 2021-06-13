@@ -1,0 +1,13 @@
+{
+  "itemGroup.marvel": "§cMarvel",
+  "item.marvel.uru_ingot": "§8Uru Ingot",
+  "item.marvel.uru_nugget": "§8Uru Nugget",
+  "item.marvel.star_core": "§eStar Core",
+  "item.marvel.star": "§eStar",
+  "item.marvel.mjolnir_handle": "§eHandle of §6Mjölnir",
+  "item.marvel.mjolnir": "§6Mjölnir",
+  "block.marvel.uru_ore": "§8Uru Ore",
+  "block.marvel.uru_block": "§8Uru Block",
+  "tooltip.marvel.hold_shift": "§7Hold §eShift §7for more information!",
+  "tooltip.marvel.mjolnir": "§7This is the hammer of the god §bThor§7. If you §9Right-Click §7on a entity or pressing §9Shift §7you will strike a §6lightning§7."
+}
