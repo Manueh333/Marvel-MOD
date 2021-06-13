@@ -74,36 +74,39 @@ public class mjolnir extends SwordItem {
 
     @Override
     public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
-        boolean sneakPressed = Screen.hasShiftDown();
-        ServerPlayerEntity splayer = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(player.getUUID());
-        if(sneakPressed) {
-            //RAY END POINT - TO WHERE IT WILL TRAVEL TO
-            Double rayLength = new Double(100);
-            Vector3d playerRotation = player.getViewVector(0);
-            Vector3d rayPath = playerRotation.scale(rayLength);
 
-            //RAY START AND END POINTS
-            Vector3d from = player.getEyePosition(0);
-            Vector3d to = from.add(rayPath);
+        if(player != null) {
+            boolean sneakPressed = player.isCrouching();
+            if(sneakPressed) {
+                //RAY END POINT - TO WHERE IT WILL TRAVEL TO
+                Double rayLength = new Double(100);
+                Vector3d playerRotation = player.getViewVector(0);
+                Vector3d rayPath = playerRotation.scale(rayLength);
 
-            //CREATE THE RAY
-            RayTraceContext rayCtx = new RayTraceContext(from, to, RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.ANY, null);
-            //CAST THE RAY
-            BlockRayTraceResult rayHit = world.clip(rayCtx);
+                //RAY START AND END POINTS
+                Vector3d from = player.getEyePosition(0);
+                Vector3d to = from.add(rayPath);
 
-            //CHECK THE RESULTS
-            if (rayHit.getType() == RayTraceResult.Type.MISS){
-                //IF RAY MISSED
-            }
-            else {
-                //IF RAY HIT SOMETHING
-                Vector3d hitLocation = rayHit.getLocation();
-                splayer.addEffect(new EffectInstance(Effects.GLOWING, 40, 5));
-                LightningBoltEntity lightning = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, world);
-                lightning.setPos(hitLocation.x, hitLocation.y, hitLocation.z);
-                world.addFreshEntity(lightning);
+                //CREATE THE RAY
+                RayTraceContext rayCtx = new RayTraceContext(from, to, RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.ANY, null);
+                //CAST THE RAY
+                BlockRayTraceResult rayHit = world.clip(rayCtx);
+
+                //CHECK THE RESULTS
+                if (rayHit.getType() == RayTraceResult.Type.MISS){
+                    //IF RAY MISSED
+                }
+                else {
+                    //IF RAY HIT SOMETHING
+                    Vector3d hitLocation = rayHit.getLocation();
+                    player.addEffect(new EffectInstance(Effects.GLOWING, 40, 5));
+                    LightningBoltEntity lightning = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, world);
+                    lightning.setPos(hitLocation.x, hitLocation.y, hitLocation.z);
+                    world.addFreshEntity(lightning);
+                }
             }
         }
+
         return super.use(world, player, hand);
     }
 }

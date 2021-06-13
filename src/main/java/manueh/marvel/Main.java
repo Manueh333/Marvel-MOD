@@ -1,5 +1,6 @@
 package manueh.marvel;
 
+import manueh.marvel.client.ClientEvents;
 import manueh.marvel.core.event.EventHandler;
 import manueh.marvel.core.init.BlockInit;
 import manueh.marvel.core.init.ItemInit;
@@ -42,7 +43,6 @@ public class Main
         BlockInit.BLOCKS.register(bus);
 
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, OreGeneration::generateOres);
-        MinecraftForge.EVENT_BUS.addListener(EventHandler::ChangeArmor);
         MinecraftForge.EVENT_BUS.register(this);
     }
     private void setup(final FMLCommonSetupEvent event) {
