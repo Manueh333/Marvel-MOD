@@ -22,8 +22,8 @@ public class BlockInit {
             .sound(SoundType.METAL)));
     public static final RegistryObject<Block> URU_BLOCK = BLOCKS.register("uru_block",
             () -> new Block(AbstractBlock.Properties.of(Material.HEAVY_METAL,
-                    MaterialColor.COLOR_LIGHT_GRAY).strength(50f, 600f)
-                    .requiresCorrectToolForDrops().harvestTool(ToolType.PICKAXE).harvestLevel(3)
+                    MaterialColor.COLOR_LIGHT_GRAY).strength(25f, 100f)
+                    .requiresCorrectToolForDrops().harvestTool(ToolType.PICKAXE).harvestLevel(2)
                     .sound(SoundType.METAL)));
     public static final RegistryObject<Block> TITANIUM_ORE = BLOCKS.register("titanium_ore",
             () -> new Block(AbstractBlock.Properties.of(Material.METAL,

@@ -34,12 +34,7 @@ public class IronManArmor extends ArmorItem {
         boolean sneakPressed = Screen.hasShiftDown();
 
         if(sneakPressed) {
-            if(stack.sameItemStackIgnoreDurability(ItemInit.IRONMAN_CHESTPLATE.get().getDefaultInstance())) {
-                tooltip.add(new TranslationTextComponent("tooltip.marvel.ironman_chestplate.json"));
-            }
-            else {
-                tooltip.add(new TranslationTextComponent("tooltip.marvel.ironman_armor"));
-            }
+            tooltip.add(new TranslationTextComponent("tooltip.marvel.ironman_armor"));
         }else {
             tooltip.add(new TranslationTextComponent("tooltip.marvel.hold_shift"));
         }

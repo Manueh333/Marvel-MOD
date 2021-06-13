@@ -3,6 +3,7 @@ package manueh.marvel.core.enums;
 import manueh.marvel.Main;
 import manueh.marvel.core.init.ItemInit;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.SoundEvent;
@@ -11,7 +12,7 @@ import net.minecraft.util.SoundEvents;
 import java.util.function.Supplier;
 
 public enum IronManMaterial implements IArmorMaterial {
-    IRONMAN_ARMOR(Main.MODID + ":" + "ironman", 25, new int[] { 4, 7, 9, 4 }, 17, SoundEvents.ARMOR_EQUIP_CHAIN, 4f, 0.2f,
+    IRONMAN_ARMOR(Main.MODID + ":" + "ironman", 5, new int[] { 4, 7, 9, 4 }, 17, SoundEvents.ARMOR_EQUIP_CHAIN, 4f, 0.2f,
             () -> Ingredient.of(ItemInit.TITANIUM_INGOT.get()));
 
     private static final int[] baseDurability = { 128, 144, 160, 112 };
