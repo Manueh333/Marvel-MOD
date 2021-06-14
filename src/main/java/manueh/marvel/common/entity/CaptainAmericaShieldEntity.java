@@ -1,5 +1,6 @@
 package manueh.marvel.common.entity;
 
+import manueh.marvel.core.init.ItemInit;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.ChickenEntity;
@@ -41,27 +42,16 @@ public class CaptainAmericaShieldEntity extends ProjectileItemEntity {
 
     }
 
+
     protected void onHitEntity(EntityRayTraceResult p_213868_1_) {
         super.onHitEntity(p_213868_1_);
-        p_213868_1_.getEntity().hurt(DamageSource.thrown(this, this.getOwner()), 0.0F);
+        p_213868_1_.getEntity().hurt(DamageSource.thrown(this, this.getOwner()), 5.0F);
     }
 
     protected void onHit(RayTraceResult p_70227_1_) {
         super.onHit(p_70227_1_);
         if (!this.level.isClientSide) {
-            if (this.random.nextInt(8) == 0) {
-                int i = 1;
-                if (this.random.nextInt(32) == 0) {
-                    i = 4;
-                }
-
-                for(int j = 0; j < i; ++j) {
-                    ChickenEntity chickenentity = EntityType.CHICKEN.create(this.level);
-                    chickenentity.setAge(-24000);
-                    chickenentity.moveTo(this.getX(), this.getY(), this.getZ(), this.yRot, 0.0F);
-                    this.level.addFreshEntity(chickenentity);
-                }
-            }
+            this.getOwner();
 
             this.level.broadcastEntityEvent(this, (byte)3);
             this.remove();
@@ -70,6 +60,6 @@ public class CaptainAmericaShieldEntity extends ProjectileItemEntity {
     }
 
     protected Item getDefaultItem() {
-        return Items.EGG;
+        return ItemInit.CAPTAIN_AMERICA_SHIELD.get();
     }
 }

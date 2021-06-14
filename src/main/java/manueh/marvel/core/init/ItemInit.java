@@ -45,10 +45,10 @@ public class ItemInit {
 
     //IRON_MAN
     //MATERIAL
-    public static final RegistryObject<BlockItem> TITANIUM_ORE = ITEMS.register("titanium_ore",
-            () -> new BlockItem(BlockInit.TITANIUM_ORE.get(), new Item.Properties().tab(Main.GROUP)));
+    public static final RegistryObject<Item> NANOBOT = ITEMS.register("nanobot",
+            () -> new Item(new Item.Properties().tab(Main.GROUP)));
     //INGOT
-    public static final RegistryObject<Item> TITANIUM_INGOT = ITEMS.register("titanium_ingot",
+    public static final RegistryObject<Item> REACTOR = ITEMS.register("reactor_arc",
             () -> new Item(new Item.Properties().tab(Main.GROUP)));
     //ARMOR
     public static final RegistryObject<Item> IRONMAN_HELMET = ITEMS.register("ironman_helmet", () -> new IronManArmor(IronManMaterial.IRONMAN_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().tab(Main.GROUP)));
@@ -58,6 +58,6 @@ public class ItemInit {
 
 
     //CAPTAIN AMERICA
-    //public static final RegistryObject<Item> CAPTAIN_AMERICA_SHIELD = ITEMS.register("captain_america_shield", () -> new CaptainAmericaShield(new Item.Properties().tab(Main.GROUP)));
+    public static final RegistryObject<Item> CAPTAIN_AMERICA_SHIELD = ITEMS.register("captain_america_shield", () -> new CaptainAmericaShield(new Item.Properties().tab(Main.GROUP)));
 
 }

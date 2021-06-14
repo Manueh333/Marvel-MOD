@@ -2,6 +2,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "marvel:items/titanium_ingot"
+    "layer0": "marvel:items/nanobot"
   }
 }

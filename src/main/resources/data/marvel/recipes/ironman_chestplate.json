@@ -2,12 +2,15 @@
     "type": "minecraft:crafting_shaped",
     "pattern": [
         "m m",
-        "mmm",
+        "mNm",
         "mmm"
     ],
     "key": {
         "m": {
-            "item": "marvel:titanium_ingot"
+            "item": "marvel:nanobot"
+        },
+        "N": {
+            "item": "marvel:reactor_arc"
         }
     },
     "result": {

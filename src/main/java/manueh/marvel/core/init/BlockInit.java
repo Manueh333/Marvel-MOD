@@ -1,8 +1,10 @@
 package manueh.marvel.core.init;
 
 import manueh.marvel.Main;
+import manueh.marvel.common.blocks.MjolnirBlock;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
@@ -25,9 +27,10 @@ public class BlockInit {
                     MaterialColor.COLOR_LIGHT_GRAY).strength(25f, 100f)
                     .requiresCorrectToolForDrops().harvestTool(ToolType.PICKAXE).harvestLevel(2)
                     .sound(SoundType.METAL)));
-    public static final RegistryObject<Block> TITANIUM_ORE = BLOCKS.register("titanium_ore",
-            () -> new Block(AbstractBlock.Properties.of(Material.METAL,
-                    MaterialColor.COLOR_LIGHT_GRAY).strength(50f, 120f)
-                    .requiresCorrectToolForDrops().harvestTool(ToolType.PICKAXE).harvestLevel(2)
+    public static final RegistryObject<Block> MJOLNIR_BLOCK = BLOCKS.register("mjolnir_block",
+            () -> new MjolnirBlock(AbstractBlock.Properties.of(Material.HEAVY_METAL,
+                    MaterialColor.COLOR_LIGHT_GRAY)
+                    .strength(-1.0F, 3600000.0F)
                     .sound(SoundType.METAL)));
+
 }

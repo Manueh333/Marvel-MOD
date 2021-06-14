@@ -1,8 +1,12 @@
 package manueh.marvel.common.items;
 
+import manueh.marvel.core.init.BlockInit;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.LightningBoltEntity;
@@ -13,6 +17,7 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
@@ -22,6 +27,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -49,6 +55,47 @@ public class mjolnir extends SwordItem {
             tooltip.add(new TranslationTextComponent("tooltip.marvel.hold_shift"));
         }
 
+    }
+
+
+    @Nullable
+    @Override
+    public Entity createEntity(World world, Entity location, ItemStack itemstack) {
+        itemstack.setCount(0);
+        world.setBlock(location.blockPosition(), BlockInit.MJOLNIR_BLOCK.get().defaultBlockState(), Constants.BlockFlags.DEFAULT);
+
+        return super.createEntity(world, location, itemstack);
+    }
+
+    @Override
+    public boolean onDroppedByPlayer(ItemStack item, PlayerEntity player) {
+
+
+        item.setCount(0);
+        if(player.getCommandSenderWorld().getBlockState(new BlockPos(player.position())) == BlockInit.MJOLNIR_BLOCK.get().defaultBlockState()) {
+            int rand = (int)(Math.random() * ((4 - 1) + 1)) + 1;
+            if(rand == 1) {
+                player.getCommandSenderWorld().setBlock(new BlockPos(player.position().add(1,1,0)), BlockInit.MJOLNIR_BLOCK.get().defaultBlockState(), Constants.BlockFlags.DEFAULT);
+
+            }
+            if(rand == 2) {
+                player.getCommandSenderWorld().setBlock(new BlockPos(player.position().add(-1,1,0)), BlockInit.MJOLNIR_BLOCK.get().defaultBlockState(), Constants.BlockFlags.DEFAULT);
+
+            }
+            if(rand == 3) {
+                player.getCommandSenderWorld().setBlock(new BlockPos(player.position().add(0,1,1)), BlockInit.MJOLNIR_BLOCK.get().defaultBlockState(), Constants.BlockFlags.DEFAULT);
+
+            }
+            if(rand == 4) {
+                player.getCommandSenderWorld().setBlock(new BlockPos(player.position().add(0,1,-1)), BlockInit.MJOLNIR_BLOCK.get().defaultBlockState(), Constants.BlockFlags.DEFAULT);
+
+            }
+      }else {
+            player.getCommandSenderWorld().setBlock(new BlockPos(player.position().add(0,1,0)), BlockInit.MJOLNIR_BLOCK.get().defaultBlockState(), Constants.BlockFlags.DEFAULT);
+
+        }
+
+        return super.onDroppedByPlayer(item, player);
     }
 
     @Override
