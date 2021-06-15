@@ -1,5 +1,7 @@
 package manueh.marvel_themod.common.items;
 
+import manueh.marvel_themod.common.entity.CaptainAmericaShieldEntity;
+import manueh.marvel_themod.common.entity.MjolnirEntity;
 import manueh.marvel_themod.core.init.BlockInit;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -58,16 +60,7 @@ public class mjolnir extends SwordItem {
     }
 
 
-    @Nullable
-    @Override
-    public Entity createEntity(World world, Entity location, ItemStack itemstack) {
-        itemstack.setCount(0);
-        world.setBlock(location.blockPosition(), BlockInit.MJOLNIR_BLOCK.get().defaultBlockState(), Constants.BlockFlags.DEFAULT);
-
-        return super.createEntity(world, location, itemstack);
-    }
-
-    @Override
+ /*   @Override
     public boolean onDroppedByPlayer(ItemStack item, PlayerEntity player) {
 
 
@@ -96,9 +89,9 @@ public class mjolnir extends SwordItem {
         }
 
         return super.onDroppedByPlayer(item, player);
-    }
+    }*/
 
-    @Override
+   /* @Override
     public ActionResultType interactLivingEntity(ItemStack stack, PlayerEntity player, LivingEntity entity, Hand hand) {
         player.addEffect(new EffectInstance(Effects.GLOWING, 40, 5));
         World world = entity.getCommandSenderWorld();
@@ -154,6 +147,18 @@ public class mjolnir extends SwordItem {
             }
         }
 
+        return super.use(world, player, hand);
+    }
+*/
+
+    @Override
+    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+        ItemStack itemstack = player.getItemInHand(hand);
+        MjolnirEntity entity = new MjolnirEntity(world, player);
+        entity.setItem(itemstack);
+        entity.shootFromRotation(player, player.xRot, player.yRot, 0.0F, 1.5F, 1.0F);
+        world.addFreshEntity(entity);
+        player.getCooldowns().addCooldown(this, 10);
         return super.use(world, player, hand);
     }
 

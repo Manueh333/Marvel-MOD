@@ -6,27 +6,24 @@ import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.LightningBoltEntity;
-import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.EggEntity;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.Util;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class CaptainAmericaShieldEntity extends ProjectileItemEntity {
+public class MjolnirEntity extends ProjectileItemEntity {
 
-    public CaptainAmericaShieldEntity(World p_i1780_1_, LivingEntity p_i1780_2_) {
+    public MjolnirEntity(World p_i1780_1_, LivingEntity p_i1780_2_) {
         super(EntityType.EGG, p_i1780_2_, p_i1780_1_);
     }
 
@@ -44,9 +41,16 @@ public class CaptainAmericaShieldEntity extends ProjectileItemEntity {
 
     protected void onHitEntity(EntityRayTraceResult entityRayTraceResult) {
         super.onHitEntity(entityRayTraceResult);
-        entityRayTraceResult.getEntity().hurt(DamageSource.thrown(this, this.getOwner()), 15.0F);
-
-
+        entityRayTraceResult.getEntity().hurt(DamageSource.thrown(this, this.getOwner()), 5.0F);
+        if(this.getOwner().getEntity() instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) this.getOwner();
+            player.addEffect(new EffectInstance(Effects.GLOWING, 40, 5));
+        }
+        Entity entity = entityRayTraceResult.getEntity();
+        World world = entity.getCommandSenderWorld();
+        LightningBoltEntity lightning = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, world);
+        lightning.setPos(entity.getX(), entity.getY(), entity.getZ());
+        world.addFreshEntity(lightning);
     }
 
     protected void onHit(RayTraceResult rayTraceResult) {
@@ -56,13 +60,19 @@ public class CaptainAmericaShieldEntity extends ProjectileItemEntity {
 
             this.level.broadcastEntityEvent(this, (byte)3);
             this.remove();
-
+            if(this.getOwner().getEntity() instanceof PlayerEntity) {
+                PlayerEntity player = (PlayerEntity) this.getOwner();
+                player.addEffect(new EffectInstance(Effects.GLOWING, 40, 5));
+            }
+            LightningBoltEntity lightning = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, this.getCommandSenderWorld());
+            lightning.setPos(rayTraceResult.getLocation().x, rayTraceResult.getLocation().y, rayTraceResult.getLocation().z);
+            this.getCommandSenderWorld().addFreshEntity(lightning);
         }
 
     }
 
     @Override
     protected Item getDefaultItem() {
-        return ItemInit.CAPTAIN_AMERICA_SHIELD.get();
+        return ItemInit.MJOLNIR.get();
     }
 }

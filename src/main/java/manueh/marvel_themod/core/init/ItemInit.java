@@ -40,7 +40,7 @@ public class ItemInit {
             () -> new Item(new Item.Properties().tab(Main.GROUP)));
     //MJOLNIR
     public static final RegistryObject<Item> MJOLNIR = ITEMS.register("mjolnir",
-            () -> new mjolnir(ItemTier.DIAMOND,8,-1.5f, new Item.Properties().tab(Main.GROUP).durability(800).setNoRepair()));
+            () -> new mjolnir(ItemTier.DIAMOND,8,-1.5f, new Item.Properties().tab(Main.GROUP).durability(800).setNoRepair().fireResistant()));
 
 
     //IRON_MAN
@@ -58,6 +58,6 @@ public class ItemInit {
 
 
     //CAPTAIN AMERICA
-    //public static final RegistryObject<Item> CAPTAIN_AMERICA_SHIELD = ITEMS.register("captain_america_shield", () -> new CaptainAmericaShield(new Item.Properties().tab(Main.GROUP)));
+    public static final RegistryObject<Item> CAPTAIN_AMERICA_SHIELD = ITEMS.register("captain_america_shield", () -> new CaptainAmericaShield(ItemTier.DIAMOND,8,-1.5f, new Item.Properties().tab(Main.GROUP).durability(800).setNoRepair().fireResistant()));
 
 }

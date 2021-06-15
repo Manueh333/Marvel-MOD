@@ -2,7 +2,8 @@
     "__comment": "Model generated using MrCrayfish's Model Creator (https://mrcrayfish.com/tools?id=mc)",
     "textures": {
         "mjolnir_hammer": "marvel_themod:items/mjolnir_hammer",
-        "mijolnir_stick": "marvel_themod:items/mijolnir_stick"
+        "mijolnir_stick": "marvel_themod:items/mijolnir_stick",
+        "particle": "marvel_themod:items/mjolnir_hammer"
     },
     "display": {
         "gui": {

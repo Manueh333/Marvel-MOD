@@ -124,10 +124,13 @@ public class ClientEvents {
     @SubscribeEvent
     public static void mjolnirLightningProtection(LivingDamageEvent event) {
         if(Minecraft.getInstance().player.getItemInHand(Hand.MAIN_HAND).sameItemStackIgnoreDurability(ItemInit.MJOLNIR.get().getDefaultInstance())) {
-            if(event.getSource().equals(DamageSource.LIGHTNING_BOLT) || event.getSource().equals(DamageSource.ON_FIRE) || event.getSource().equals(DamageSource.IN_FIRE)) {
-                event.getEntity().clearFire();
-                event.setCanceled(true);
+            if(event.getEntity() instanceof PlayerEntity) {
+                if(event.getSource().equals(DamageSource.LIGHTNING_BOLT) || event.getSource().equals(DamageSource.ON_FIRE) || event.getSource().equals(DamageSource.IN_FIRE)) {
+                    event.getEntity().clearFire();
+                    event.setCanceled(true);
+                }
             }
+
 
         }
     }
