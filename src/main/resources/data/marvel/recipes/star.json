@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "ingredient": {
-    "item": "marvel:star_core"
-  },
-  "result": "marvel:star",
-  "experience": 500,
-  "cookingtime": 2000
-}

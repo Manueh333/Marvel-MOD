@@ -15,7 +15,7 @@ license="All rights reserved"
 # A list of mods - how many allowed here is determined by the individual mod loader
 [[mods]] #mandatory
 # The modid of the mod
-modId="marvel" #mandatory
+modId="marvel_themod" #mandatory
 # The version number of the mod - there's a few well known ${} variables useable here or just hardcode it
 # ${file.jarVersion} will substitute the value of the Implementation-Version as read from the mod's JAR file metadata
 # see the associated build.gradle script for how to populate this completely automatically during a build
@@ -36,11 +36,11 @@ authors="Manueh_" #optional
 description='''
 
 
-Mod that adds objects of the Marvel universe
+Mod that adds objects of the marvel_themod universe
 
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
-[[dependencies.marvel]] #optional
+[[dependencies.marvel_themod]] #optional
     # the modid of the dependency
     modId="forge" #mandatory
     # Does this dependency have to exist - if not, ordering below must be specified
@@ -52,7 +52,7 @@ Mod that adds objects of the Marvel universe
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
     side="BOTH"
 # Here's another dependency
-[[dependencies.marvel]]
+[[dependencies.marvel_themod]]
     modId="minecraft"
     mandatory=true
 # This version range declares a minimum of the current minecraft version up to but not including the next major version

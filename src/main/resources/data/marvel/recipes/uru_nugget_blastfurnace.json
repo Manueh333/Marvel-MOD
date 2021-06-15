@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:blasting",
-  "ingredient": {
-    "item": "marvel:uru_ore"
-  },
-  "result": "marvel:uru_nugget",
-  "experience": 8,
-  "cookingtime": 140
-}

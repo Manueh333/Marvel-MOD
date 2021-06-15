@@ -1,0 +1,66 @@
+{
+    "__comment": "Model generated using MrCrayfish's Model Creator (https://mrcrayfish.com/tools?id=mc)",
+    "textures": {
+        "mjolnir_hammer": "marvel_themod:items/mjolnir_hammer",
+        "mijolnir_stick": "marvel_themod:items/mijolnir_stick"
+    },
+    "display": {
+        "gui": {
+            "rotation": [ 8, 50, 0 ],
+            "translation": [ 0, 0, 0 ],
+            "scale": [ 0.75, 0.75, 0.75 ]
+        },
+        "ground": {
+            "rotation": [ 0, 0, 0 ],
+            "translation": [ 0, 2, 0 ],
+            "scale": [ 0.5, 0.5, 0.5 ]
+        },
+        "fixed": {
+            "rotation": [ 0, 90, 0 ],
+            "translation": [ 0, 0, 0 ],
+            "scale": [ 1, 1, 1 ]
+        },
+        "head": {
+            "rotation": [ 0, 180, 0 ],
+            "translation": [ 0, 13, 7 ],
+            "scale": [ 1, 1, 1 ]
+        },
+        "firstperson_righthand": {
+            "rotation": [ 0, 0, 0 ],
+            "translation": [ 1.13, 2.2, -4.87 ],
+            "scale": [ 0.68, 0.68, 0.68 ]
+        },
+        "thirdperson_righthand": {
+            "rotation": [ 0, 0, 0 ],
+            "translation": [ 0, 3, 1 ],
+            "scale": [ 0.55, 0.55, 0.55 ]
+        }
+    },
+    "elements": [
+        {
+            "name": "Cube",
+            "from": [ 7, 0, 7 ], 
+            "to": [ 9, 9, 9 ], 
+            "faces": {
+                "north": { "texture": "#mijolnir_stick", "uv": [ 0, 0, 2, 9 ] },
+                "east": { "texture": "#mijolnir_stick", "uv": [ 0, 0, 2, 9.6 ] },
+                "south": { "texture": "#mijolnir_stick", "uv": [ 0, 1, 2, 10 ] },
+                "west": { "texture": "#mijolnir_stick", "uv": [ 0, 0, 2, 8.2 ] },
+                "down": { "texture": "#mijolnir_stick", "uv": [ 2, 1, 1, 2 ] }
+            }
+        },
+        {
+            "name": "Cube",
+            "from": [ 4, 9, 1 ], 
+            "to": [ 12, 16, 15 ], 
+            "faces": {
+                "north": { "texture": "#mjolnir_hammer", "uv": [ 0, 0, 16, 16 ] },
+                "east": { "texture": "#mjolnir_hammer", "uv": [ 0, 0, 16, 16 ] },
+                "south": { "texture": "#mjolnir_hammer", "uv": [ 0, 0, 16, 16 ] },
+                "west": { "texture": "#mjolnir_hammer", "uv": [ 0, 0, 16, 16 ] },
+                "up": { "texture": "#mjolnir_hammer", "uv": [ 0, 0, 16, 16 ] },
+                "down": { "texture": "#mjolnir_hammer", "uv": [ 0, 0, 16, 16 ] }
+            }
+        }
+    ]
+}
