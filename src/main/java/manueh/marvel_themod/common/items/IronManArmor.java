@@ -22,6 +22,8 @@ public class IronManArmor extends ArmorItem {
         super(material, slotType, properties);
     }
 
+    public boolean flying = false;
+
     @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flagIn) {

@@ -35,7 +35,7 @@ public class Main
     public Main() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(this::setup);
-    //    bus.addListener(this::clientSetup);
+        //bus.addListener(this::clientSetup);
 
         ItemInit.ITEMS.register(bus);
         BlockInit.BLOCKS.register(bus);
@@ -46,12 +46,11 @@ public class Main
     }
 
 
-//    public static final KeyBinding MJOLNIR_FLY_KEY = new KeyBinding("key.marvel_themod.mjolnir_fly", KeyConflictContext.IN_GAME, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_SPACE, "key.categories.marvel_themod");
 
 
-  //  private void clientSetup(final FMLClientSetupEvent event) {
-  //      ClientRegistry.registerKeyBinding(MJOLNIR_FLY_KEY);
-  //  }
+    //private void clientSetup(final FMLClientSetupEvent event) {
+   //     ClientRegistry.registerKeyBinding(keyFly);
+    //}
 
     private void setup(final FMLCommonSetupEvent event) {
 

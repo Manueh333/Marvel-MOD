@@ -8,6 +8,8 @@ import net.java.games.input.Controller;
 import net.java.games.input.Keyboard;
 import net.minecraft.client.GameSettings;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.CloudParticle;
+import net.minecraft.client.particle.WhiteAshParticle;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
@@ -20,12 +22,16 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particles.IParticleData;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
@@ -54,23 +60,53 @@ import javax.swing.text.JTextComponent;
 @Mod.EventBusSubscriber(modid = Main.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientEvents {
 
+    public static final KeyBinding keyFly = new KeyBinding("key.marvel.fly", GLFW.GLFW_KEY_LEFT_ALT, "key.categories.marvel_themod");
+
+    private static boolean flying = false;
+
     @SubscribeEvent
     public static void activateFly(final TickEvent.PlayerTickEvent event) {
         PlayerEntity player = event.player;
         if(player != null) {
+            GameSettings settings = Minecraft.getInstance().options;
+            KeyBinding jump = settings.keyJump;
+            KeyBinding crouch = settings.keyShift;
+            KeyBinding fly = ClientEvents.keyFly;
             if(player.getItemBySlot(EquipmentSlotType.HEAD).getStack().sameItemStackIgnoreDurability(ItemInit.IRONMAN_HELMET.get().getDefaultInstance()) && player.getItemBySlot(EquipmentSlotType.CHEST).getStack().sameItemStackIgnoreDurability(ItemInit.IRONMAN_CHESTPLATE.get().getDefaultInstance()) && player.getItemBySlot(EquipmentSlotType.LEGS).getStack().sameItemStackIgnoreDurability(ItemInit.IRONMAN_LEGGINS.get().getDefaultInstance()) && player.getItemBySlot(EquipmentSlotType.FEET).getStack().sameItemStackIgnoreDurability(ItemInit.IRONMAN_BOOTS.get().getDefaultInstance())) {
-                player.abilities.mayfly = true;
-                changeFlySpeed(player,0.05001f);
-            }else {
-                if(player.abilities.getFlyingSpeed() == 0.05001f) {
-                    if(!player.isCreative() && !player.isSpectator()) {
-                        player.abilities.mayfly = false;
-                        player.abilities.flying = false;
+                if(flying) {
+                    if(jump.isDown()) {
+                        player.setDeltaMovement(player.getDeltaMovement().x,0.3f, player.getDeltaMovement().z);
+
+                    }if(crouch.isDown()) {
+                        player.setDeltaMovement(player.getDeltaMovement().x,-0.3f, player.getDeltaMovement().z);
+
+                    }if(!jump.isDown() && !crouch.isDown()) {
+                        player.setDeltaMovement(player.getDeltaMovement().x * 1.03,0, player.getDeltaMovement().z * 1.03);
+
                     }
-                    changeFlySpeed(player, 0.05f);
+
                 }
-            }
+
+                if(fly.consumeClick()) {
+                    flying = !flying;
+                    if(flying) {
+                        player.setDeltaMovement(player.getDeltaMovement().x ,1, player.getDeltaMovement().z);
+                    }
+                }
+                if(flying) {
+                    player.getCommandSenderWorld().addParticle(ParticleTypes.CLOUD, player.position().x + (player.getCommandSenderWorld().random.nextFloat() - player.getCommandSenderWorld().random.nextFloat()) / 2, player.position().y + (player.getCommandSenderWorld().random.nextFloat() / 2 - player.getCommandSenderWorld().random.nextFloat()) / 2, player.position().z + (player.getCommandSenderWorld().random.nextFloat() - player.getCommandSenderWorld().random.nextFloat()) / 4, 0, -0.5, 0);
+                }
+                player.fallDistance = 0;
+
+
+
+           }
         }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void changeWalkSpeed(PlayerEntity player, float speed) {
+        player.abilities.setWalkingSpeed(speed);
     }
 
     public static void changeFlySpeed(PlayerEntity player, float speed) {
@@ -127,17 +163,49 @@ public class ClientEvents {
   }
 
     @SubscribeEvent
-    public static void mjolnirLightningProtection(LivingDamageEvent event) {
-        if(Minecraft.getInstance().player.getItemInHand(Hand.MAIN_HAND).sameItemStackIgnoreDurability(ItemInit.MJOLNIR.get().getDefaultInstance())) {
-            if(event.getEntity() instanceof PlayerEntity) {
-                if(event.getSource().equals(DamageSource.LIGHTNING_BOLT) || event.getSource().equals(DamageSource.ON_FIRE) || event.getSource().equals(DamageSource.IN_FIRE)) {
-                    event.getEntity().clearFire();
-                    event.setCanceled(true);
+    public static void fallDamage(LivingDamageEvent event) {
+        PlayerEntity player = null;
+        if (event.getEntity().is(Minecraft.getInstance().player)) {
+            player = (PlayerEntity) event.getEntity();
+        }
+        if(player != null) {
+            if(player.getItemBySlot(EquipmentSlotType.HEAD).getStack().sameItemStackIgnoreDurability(ItemInit.IRONMAN_HELMET.get().getDefaultInstance()) && player.getItemBySlot(EquipmentSlotType.CHEST).getStack().sameItemStackIgnoreDurability(ItemInit.IRONMAN_CHESTPLATE.get().getDefaultInstance()) && player.getItemBySlot(EquipmentSlotType.LEGS).getStack().sameItemStackIgnoreDurability(ItemInit.IRONMAN_LEGGINS.get().getDefaultInstance()) && player.getItemBySlot(EquipmentSlotType.FEET).getStack().sameItemStackIgnoreDurability(ItemInit.IRONMAN_BOOTS.get().getDefaultInstance())) {
+                if(event.getSource().equals(DamageSource.FALL)) {
+                        event.setCanceled(true);
+                        player.fallDistance = 0;
                 }
             }
 
-
+            if(player.getItemInHand(Hand.MAIN_HAND).sameItemStackIgnoreDurability(ItemInit.MJOLNIR.get().getDefaultInstance())) {
+                if(event.getSource().equals(DamageSource.FALL)) {
+                    event.setCanceled(true);
+                    player.fallDistance = 0;
+                }
+            }
         }
+
+
+    }
+
+    @SubscribeEvent
+    public static void mjolnirLightningProtection(LivingDamageEvent event) {
+        PlayerEntity player = null;
+        if(event.getEntity().is(Minecraft.getInstance().player)) {
+            player = (PlayerEntity) event.getEntity();
+        }
+        if(player != null) {
+            if(player.getItemInHand(Hand.MAIN_HAND).sameItemStackIgnoreDurability(ItemInit.MJOLNIR.get().getDefaultInstance())) {
+                if(event.getEntity() instanceof PlayerEntity) {
+                    if(event.getSource().equals(DamageSource.LIGHTNING_BOLT) || event.getSource().equals(DamageSource.ON_FIRE) || event.getSource().equals(DamageSource.IN_FIRE)) {
+                        event.getEntity().clearFire();
+                        event.setCanceled(true);
+                    }
+                }
+
+
+            }
+        }
+
     }
 
 }
