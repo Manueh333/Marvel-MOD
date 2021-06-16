@@ -9,6 +9,9 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -32,7 +35,7 @@ public class Main
     public Main() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(this::setup);
-        bus.addListener(this::clientSetup);
+    //    bus.addListener(this::clientSetup);
 
         ItemInit.ITEMS.register(bus);
         BlockInit.BLOCKS.register(bus);
@@ -42,11 +45,13 @@ public class Main
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    public static final KeyBinding MJOLNIR_FLY_KEY = new KeyBinding("key.marvel_themod.mjolnir_fly", KeyConflictNone.NONE, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_SPACE, "key.categories.marvel_themod");
 
-    private void clientSetup(final FMLClientSetupEvent event) {
-        ClientRegistry.registerKeyBinding(MJOLNIR_FLY_KEY);
-    }
+//    public static final KeyBinding MJOLNIR_FLY_KEY = new KeyBinding("key.marvel_themod.mjolnir_fly", KeyConflictContext.IN_GAME, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_SPACE, "key.categories.marvel_themod");
+
+
+  //  private void clientSetup(final FMLClientSetupEvent event) {
+  //      ClientRegistry.registerKeyBinding(MJOLNIR_FLY_KEY);
+  //  }
 
     private void setup(final FMLCommonSetupEvent event) {
 

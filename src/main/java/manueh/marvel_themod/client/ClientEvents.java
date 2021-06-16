@@ -6,7 +6,9 @@ import manueh.marvel_themod.core.init.ItemInit;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.Keyboard;
+import net.minecraft.client.GameSettings;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -47,6 +49,7 @@ import org.lwjgl.glfw.GLFW;
 import sun.util.resources.cldr.kea.TimeZoneNames_kea;
 
 import javax.annotation.Nullable;
+import javax.swing.text.JTextComponent;
 
 @Mod.EventBusSubscriber(modid = Main.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientEvents {
@@ -109,7 +112,9 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void mjolnirFly(TickEvent.ClientTickEvent event) {
-        if(Main.MJOLNIR_FLY_KEY.isDown()) {
+        GameSettings settings = Minecraft.getInstance().options;
+        KeyBinding jump = settings.keyJump;
+        if(jump.isDown()) {
             if(Minecraft.getInstance().player.getItemInHand(Hand.MAIN_HAND).sameItemStackIgnoreDurability(ItemInit.MJOLNIR.get().getDefaultInstance())) {
 
                 Minecraft.getInstance().player.setDeltaMovement(Minecraft.getInstance().player.getDeltaMovement().x ,0.6, Minecraft.getInstance().player.getDeltaMovement().z);
