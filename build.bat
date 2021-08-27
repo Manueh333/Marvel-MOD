@@ -1,3 +1,0 @@
-gradlew build
-PAUSE
-PAUSE
