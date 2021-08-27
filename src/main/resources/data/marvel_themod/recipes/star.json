@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": {
+    "item": "marvel_themod:star_core"
+  },
+  "result": "marvel_themod:star",
+  "experience": 500,
+  "cookingtime": 2000
+}

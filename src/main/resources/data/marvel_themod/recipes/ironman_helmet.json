@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "mmm",
+    "m m"
+  ],
+  "key": {
+    "m": {
+      "item": "marvel_themod:nanobot"
+    }
+  },
+  "result": {
+    "item": "marvel_themod:ironman_helmet",
+    "count": 1
+  }
+}

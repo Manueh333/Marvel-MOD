@@ -1,0 +1,84 @@
+{
+	"__comment": "Designed by Manueh_",
+	"textures": {
+		"atlas": "marvel_themod:items/captain_america_shield",
+		"particle": "marvel_themod:items/captain_america_shield_particle",
+		"texture": "marvel_themod:items/captain_america_shield_hold"
+	},
+	"elements": [
+		{
+			"__comment": "Cube1",
+			"from": [ -2, 0, -0.5 ],
+			"to": [ 14, 3, 15.5 ],
+			"faces": {
+				"down": { "uv": [ 0, 8, 8, 16 ], "texture": "#atlas" },
+				"up": { "uv": [ 8, 8, 16, 16 ], "texture": "#atlas" },
+				"north": { "uv": [ 0, 6.5, 8, 8 ], "texture": "#atlas" },
+				"south": { "uv": [ 0, 5, 8, 6.5 ], "texture": "#atlas" },
+				"west": { "uv": [ 0, 3.5, 8, 5 ], "texture": "#atlas", "rotation": 270 },
+				"east": { "uv": [ 0, 3.5, 8, 5 ], "texture": "#atlas" }
+			}
+		},
+		{
+			"__comment": "Cube2",
+			"from": [ 3, -0.5, 2.5 ],
+			"to": [ 4, 0.5, 12.5 ],
+			"faces": {
+				"down": { "uv": [ 3, 3.5, 4, 13.5 ], "texture": "#texture" },
+				"up": { "uv": [ 3, 2.5, 4, 12.5 ], "texture": "#texture" },
+				"north": { "uv": [ 12, 15.5, 13, 16 ], "texture": "#texture" },
+				"south": { "uv": [ 3, 15.5, 4, 16 ], "texture": "#texture" },
+				"west": { "uv": [ 2.5, 15.5, 12.5, 16 ], "texture": "#texture" },
+				"east": { "uv": [ 3.5, 15.5, 13.5, 16 ], "texture": "#texture" }
+			}
+		},
+		{
+			"__comment": "Cube2",
+			"from": [ 8, -0.5, 2.5 ],
+			"to": [ 9, 0.5, 12.5 ],
+			"faces": {
+				"down": { "uv": [ 3, 3.5, 4, 13.5 ], "texture": "#texture" },
+				"up": { "uv": [ 3, 2.5, 4, 12.5 ], "texture": "#texture" },
+				"north": { "uv": [ 12, 15.5, 13, 16 ], "texture": "#texture" },
+				"south": { "uv": [ 3, 15.5, 4, 16 ], "texture": "#texture" },
+				"west": { "uv": [ 2.5, 15.5, 12.5, 16 ], "texture": "#texture" },
+				"east": { "uv": [ 3.5, 15.5, 13.5, 16 ], "texture": "#texture" }
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation":  [ -25, 180, 3 ],
+			"translation":  [ -1, 4.1739, -1.391 ],
+			"scale":  [ 0.7, 0.7, 0.7 ]
+		},
+		"thirdperson_lefthand": {
+			"rotation":  [ -25, 180, 3 ],
+			"translation":  [ 1.3913, 4.1739, -1.391 ],
+			"scale":  [ 0.7, 0.7, 0.7 ]
+		},
+		"firstperson_righthand": {
+			"rotation":  [ 94, 7, -119 ],
+			"translation":  [ 0, 4.1739, 0 ],
+			"scale":  [ 0.3, 0.3, 0.3 ]
+		},
+		"firstperson_lefthand": {
+			"rotation":  [ 94, 7, -119 ],
+			"translation":  [ 1.3913, 4.1738, 0 ],
+			"scale":  [ 0.3, 0.3, 0.3 ]
+		},
+		"gui": {
+			"rotation":  [ 90, 0, 0 ],
+			"translation":  [ 1, 0, 5.5652 ],
+			"scale":  [ 0.7, 0.7, 0.7 ]
+		},
+		"ground": {
+			"translation":  [ 0, 6.9565, 0 ],
+			"scale":  [ 0.5, 0.5, 0.5 ]
+		},
+		"fixed": {
+			"rotation":  [ -90, 180, 0 ],
+			"translation":  [ -2, 0, -7 ]
+		}
+	}
+}
