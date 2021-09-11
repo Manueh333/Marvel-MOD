@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "marvel_themod:uru_nugget"
+    }
+  },
+  "result": {
+    "item": "marvel_themod:uru_ingot",
+    "count": 1
+  }
+}

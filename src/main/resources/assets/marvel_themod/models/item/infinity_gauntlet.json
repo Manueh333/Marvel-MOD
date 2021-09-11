@@ -1,0 +1,45 @@
+{
+  "credit": "Made with Blockbench by Manueh_",
+  "texture_size": [64, 64],
+  "textures": {
+    "layer0": "marvel_themod:items/infinity_gauntlet_0"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "marvel_themod:gem": 0.0
+      },
+      "model": "marvel_themod:item/infinity_gauntlet_0"
+    },
+    {
+      "predicate": {
+        "marvel_themod:gem": 1.0
+      },
+      "model": "marvel_themod:item/infinity_gauntlet_1"
+    },
+    {
+      "predicate": {
+        "marvel_themod:gem": 2.0
+      },
+      "model": "marvel_themod:item/infinity_gauntlet_2"
+    },
+    {
+      "predicate": {
+        "marvel_themod:gem": 3.0
+      },
+      "model": "marvel_themod:item/infinity_gauntlet_3"
+    },
+    {
+      "predicate": {
+        "marvel_themod:gem": 4.0
+      },
+      "model": "marvel_themod:item/infinity_gauntlet_4"
+    },
+    {
+      "predicate": {
+        "marvel_themod:gem": 5.0
+      },
+      "model": "marvel_themod:item/infinity_gauntlet_5"
+    }
+  ]
+}

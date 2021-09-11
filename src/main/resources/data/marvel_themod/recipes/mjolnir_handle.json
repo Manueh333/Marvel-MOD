@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#/#",
+    "mLm",
+    "#/#"
+  ],
+  "key": {
+    "#": {
+      "tag": "minecraft:planks"
+    },
+    "/": {
+      "tag": "forge:rods/wooden"
+    },
+    "m": {
+      "item": "marvel_themod:uru_ingot"
+    },
+    "L": {
+      "item": "minecraft:leather"
+    }
+  },
+  "result": {
+    "item": "marvel_themod:mjolnir_handle",
+    "count": 1
+  }
+}
