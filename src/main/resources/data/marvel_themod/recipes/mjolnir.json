@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smithing",
+  "base": {
+    "item": "marvel_themod:mjolnir_handle"
+  },
+  "addition": {
+    "item": "marvel_themod:uru_block"
+  },
+  "result": {
+    "item": "marvel_themod:mjolnir"
+  }
+}

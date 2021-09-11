@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#i#",
+    "ini",
+    "#i#"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:shield"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "n": {
+      "item": "minecraft:netherite_ingot"
+    }
+  },
+  "result": {
+    "item": "marvel_themod:captain_america_shield",
+    "count": 1
+  }
+}

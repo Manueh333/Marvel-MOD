@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#R#",
+    "mmm"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:diamond"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "m": {
+      "item": "minecraft:netherite_scrap"
+    }
+  },
+  "result": {
+    "item": "marvel_themod:nanobot",
+    "count": 3
+  }
+}

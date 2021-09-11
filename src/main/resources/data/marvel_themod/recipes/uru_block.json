@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "mmm",
+    "mNm",
+    "mmm"
+  ],
+  "key": {
+    "m": {
+      "item": "marvel_themod:uru_ingot"
+    },
+    "N": {
+      "item": "marvel_themod:star"
+    }
+  },
+  "result": {
+    "item": "marvel_themod:uru_block",
+    "count": 1
+  }
+}
