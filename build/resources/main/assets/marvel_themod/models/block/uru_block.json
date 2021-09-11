@@ -1,6 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "marvel_themod:blocks/uru_block"
-  }
-}
