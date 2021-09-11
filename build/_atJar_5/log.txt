@@ -1,0 +1,5 @@
+Args: "--inJar", "C:\Users\rafae\.gradle\caches\forge_gradle\minecraft_user_repo\net\minecraftforge\forge\1.16.5-36.1.31\forge-1.16.5-36.1.31-injected.jar", "--outJar", "C:\Users\rafae\.gradle\caches\forge_gradle\minecraft_user_repo\net\minecraftforge\forge\1.16.5-36.1.31_mapped_official_1.16.5\forge-1.16.5-36.1.31_mapped_official_1.16.5.jar", "--logFile", "accesstransform.log", "--atFile", "C:\Users\rafae\Desktop\Marvel-MOD-1.16.5\build\_atJar_5\parent_at.cfg"
+Classpath: C:\Users\rafae\.gradle\caches\forge_gradle\maven_downloader\net\minecraftforge\accesstransformers\1.0.5\accesstransformers-1.0.5-fatjar.jar
+WorkDir: C:\Users\rafae\Desktop\Marvel-MOD-1.16.5\build\_atJar_5
+Main: net.minecraftforge.accesstransformer.TransformerProcessor
+====================================

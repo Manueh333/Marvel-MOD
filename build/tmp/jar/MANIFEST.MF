@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Specification-Title: marvel_themod
+Specification-Vendor: 
+Specification-Version: 1
+Implementation-Title: Marvel-MOD-1.16.5
+Implementation-Version: 1.5
+Implementation-Vendor: 
+Implementation-Timestamp: 2021-08-29T18:40:30+0200
+
