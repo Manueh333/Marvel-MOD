@@ -1,48 +1,18 @@
 {
-	"credit": "Made with Blockbench",
-	"texture_size": [512, 512],
-	"textures": {
-		"1": "marvel_themod:items/mjolnir",
-		"particles": "marvel_themod:items/mjolnir"
-	},
-	"elements": [
-		{
-			"from": [4, 0, 1],
-			"to": [12, 7, 15],
-			"faces": {
-				"north": {"uv": [3.5, 3.5, 5.5, 5.25], "texture": "#1"},
-				"east": {"uv": [0, 3.5, 3.5, 5.25], "texture": "#1"},
-				"south": {"uv": [9, 3.5, 11, 5.25], "texture": "#1"},
-				"west": {"uv": [5.5, 3.5, 9, 5.25], "texture": "#1"},
-				"up": {"uv": [5.5, 3.5, 3.5, 0], "texture": "#1"},
-				"down": {"uv": [7.5, 0, 5.5, 3.5], "texture": "#1"}
-			}
-		},
-		{
-			"from": [5, -0.5, 5],
-			"to": [11, 0.5, 11],
-			"faces": {
-				"north": {"uv": [8, 6.75, 9.5, 7], "texture": "#1"},
-				"east": {"uv": [6.5, 6.75, 8, 7], "texture": "#1"},
-				"south": {"uv": [11, 6.75, 12.5, 7], "texture": "#1"},
-				"west": {"uv": [9.5, 6.75, 11, 7], "texture": "#1"},
-				"up": {"uv": [9.5, 6.75, 8, 5.25], "texture": "#1"},
-				"down": {"uv": [11, 5.25, 9.5, 6.75], "texture": "#1"}
-			}
-		},
-		{
-			"from": [7, 7, 7],
-			"to": [9, 23, 9],
-			"faces": {
-				"north": {"uv": [5, 5.75, 5.5, 9.75], "texture": "#1"},
-				"east": {"uv": [4.5, 5.75, 5, 9.75], "texture": "#1"},
-				"south": {"uv": [6, 5.75, 6.5, 9.75], "texture": "#1"},
-				"west": {"uv": [5.5, 5.75, 6, 9.75], "texture": "#1"},
-				"up": {"uv": [5.5, 5.75, 5, 5.25], "texture": "#1"},
-				"down": {"uv": [6, 5.25, 5.5, 5.75], "texture": "#1"}
-			}
-		}
-	],
+	"loader": "forge:obj",
+	"model" : "marvel_themod:models/mjolnir.obj",
+	"flip-v": true,
+	"detectCullableFaces": false,
+	"diffuseLighting": true,
+	"ambientToFullbright": false,
+	"materialLibraryOverride": "marvel_themod:models/mjolnir.mtl",
+	"__comment": "flip-v may be required if your texture appears mirrored.  See OBJloader::read() for other flags.  currently the available options are",
+	"__comment1": "detectCullableFaces (default true) = try to convert faces to Directional Quads (EAST, WEST, etc) instead of just general quads",
+	"__comment2": "diffuseLighting (default false) = attempt to apply the direction-dependent lighting as per vanilla blocks.  Currently does nothing.",
+	"__comment3": "flipV (default false) = mirror the texture sheet top-->bottom (if your textures appear upside-down)",
+	"__comment4": "ambientToFullbright (default true) = always render at maximum world illumination (combinedLight) regardless of the actual skylight or blocklight present",
+	"__comment5": "materialLibraryOverrideLocation (default null) = use this path/filename for the material library file .mtl",
+
 	"display": {
 		"thirdperson_righthand": {
 			"rotation": [-180, 0, 0],
@@ -66,7 +36,7 @@
 		},
 		"ground": {
 			"rotation": [180, 0, 0],
-			"translation": [0, 3, 0],
+			"translation": [0, 4, 0],
 			"scale": [0.6, 0.6, 0.6]
 		},
 		"gui": {

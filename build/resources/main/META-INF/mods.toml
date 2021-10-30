@@ -38,6 +38,7 @@ description='''
 
 Mod that adds objects of the marvel_themod universe
 
+
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.marvel_themod]] #optional

@@ -1,10 +1,7 @@
 package manueh.marvel_themod.core.init;
 
 import manueh.marvel_themod.Main;
-import manueh.marvel_themod.common.items.CaptainAmericaShield;
-import manueh.marvel_themod.common.items.InfinityGauntlet;
-import manueh.marvel_themod.common.items.IronManArmor;
-import manueh.marvel_themod.common.items.mjolnir;
+import manueh.marvel_themod.common.items.*;
 import manueh.marvel_themod.core.enums.IronManMaterial;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
@@ -66,5 +63,8 @@ public class ItemInit {
     public static final RegistryObject<Item> POWER_GEM = ITEMS.register("power_gem", () -> new Item(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<BlockItem> CORRUPTED_BLOCK = ITEMS.register("corrupted_block",
             () -> new BlockItem(BlockInit.CORRUPTED_BLOCK.get(), new Item.Properties().tab(Main.GROUP)));
+
+    //HAWK EYE
+    public static final RegistryObject<Item> HAWK_EYE_BOW = ITEMS.register("hawkeye_bow", () -> new HawkEyeBow(new Item.Properties().tab(Main.GROUP).durability(800).setNoRepair().fireResistant()));
 
 }

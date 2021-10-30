@@ -3,9 +3,9 @@
   <configuration default="false" factoryName="Application" name="runData" singleton="false" type="Application">
     <option name="MAIN_CLASS_NAME" value="net.minecraftforge.userdev.LaunchTesting"/>
     <option name="VM_PARAMETERS" value="-Dforge.logging.console.level=debug -Dforge.logging.markers=REGISTRIES"/>
-    <option name="PROGRAM_PARAMETERS" value="--mod marvel_themod --all --output C:\Users\rafae\Desktop\Marvel-MOD-1.16.5\src\generated\resources --existing C:\Users\rafae\Desktop\Marvel-MOD-1.16.5\src\main\resources"/>
+    <option name="PROGRAM_PARAMETERS" value="--mod marvel_themod --all --output C:\Users\manpu\Documents\GitHub\Marvel-MOD\src\generated\resources --existing C:\Users\manpu\Documents\GitHub\Marvel-MOD\src\main\resources"/>
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$\run"/>
-    <module name="Marvel-MOD-1.16.5.main"/>
+    <module name="Marvel-MOD.main"/>
     <envs>
       <env name="MOD_CLASSES" value="marvel_themod%%$PROJECT_DIR$\build\resources\main;marvel_themod%%$PROJECT_DIR$\build\classes\java\main"/>
       <env name="MCP_MAPPINGS" value="official_1.16.5"/>

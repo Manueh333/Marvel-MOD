@@ -1,7 +1,9 @@
 manueh/marvel_themod/datagen/DataGenerators.java
  manueh.marvel_themod.datagen.DataGenerators
-manueh/marvel_themod/common/PowerGemModel.java
- manueh.marvel_themod.common.PowerGemModel
+manueh/marvel_themod/common/arrows/AcidArrow.java
+ manueh.marvel_themod.common.arrows.AcidArrow
+manueh/marvel_themod/common/items/CaptainAmericaShield.java
+ manueh.marvel_themod.common.items.CaptainAmericaShield
 manueh/marvel_themod/core/enums/FallingBlockBase.java
  manueh.marvel_themod.core.enums.FallingBlockBase
 manueh/marvel_themod/common/PowerGemRenderer.java
@@ -10,12 +12,14 @@ manueh/marvel_themod/core/init/TileEntityTypeInit.java
  manueh.marvel_themod.core.init.TileEntityTypeInit
 manueh/marvel_themod/core/init/BlockInit.java
  manueh.marvel_themod.core.init.BlockInit
+manueh/marvel_themod/common/items/HawkEyeBow.java
+ manueh.marvel_themod.common.items.HawkEyeBow
 manueh/marvel_themod/common/blocks/MjolnirBlock.java
  manueh.marvel_themod.common.blocks.MjolnirBlock
 manueh/marvel_themod/world/OreGeneration.java
  manueh.marvel_themod.world.OreGeneration
-manueh/marvel_themod/common/items/IronManArmor.java
- manueh.marvel_themod.common.items.IronManArmor
+manueh/marvel_themod/common/items/mjolnir.java
+ manueh.marvel_themod.common.items.mjolnir
 manueh/marvel_themod/core/enums/KeyConflictNone.java
  manueh.marvel_themod.core.enums.KeyConflictNone
  manueh.marvel_themod.core.enums.KeyConflictNone$1
@@ -40,6 +44,8 @@ manueh/marvel_themod/client/ClientSetup.java
  manueh.marvel_themod.client.ClientSetup
 manueh/marvel_themod/common/entity/MjolnirEntity.java
  manueh.marvel_themod.common.entity.MjolnirEntity
+manueh/marvel_themod/common/entity/HawkEyeArrowEntity.java
+ manueh.marvel_themod.common.entity.HawkEyeArrowEntity
 manueh/marvel_themod/core/event/EventHandler.java
  manueh.marvel_themod.core.event.EventHandler
 manueh/marvel_themod/core/enums/IronManMaterial.java
@@ -50,9 +56,9 @@ manueh/marvel_themod/common/blocks/CorruptedBlock.java
  manueh.marvel_themod.common.blocks.CorruptedBlock
 manueh/marvel_themod/datagen/Items.java
  manueh.marvel_themod.datagen.Items
-manueh/marvel_themod/common/items/mjolnir.java
- manueh.marvel_themod.common.items.mjolnir
-manueh/marvel_themod/common/items/CaptainAmericaShield.java
- manueh.marvel_themod.common.items.CaptainAmericaShield
+manueh/marvel_themod/common/PowerGemModel.java
+ manueh.marvel_themod.common.PowerGemModel
+manueh/marvel_themod/common/items/IronManArmor.java
+ manueh.marvel_themod.common.items.IronManArmor
 manueh/marvel_themod/core/init/ItemInit.java
  manueh.marvel_themod.core.init.ItemInit
