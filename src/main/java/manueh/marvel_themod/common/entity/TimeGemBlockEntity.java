@@ -21,6 +21,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Objects;
 
@@ -88,17 +90,27 @@ public class TimeGemBlockEntity extends TileEntity implements INameable, ITickab
   public void tick() {
     if (this.speed == 0 || (this.xRange == 0 && this.yRange == 0 && this.zRange == 0))
       return;
+    if (this.getLevel().isClientSide())
+      return;
     randomTicks = this.level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING);
+    tickBlockArea();
+  }
+
+
+  @OnlyIn(Dist.DEDICATED_SERVER)
+  private void tickBlockArea() {
     this.area.forEach(this::tickBlock);
   }
-  
+@OnlyIn(Dist.DEDICATED_SERVER)
   private void tickBlock(BlockPos pos) {
+    if (this.getLevel().isClientSide())
+      return;
     ITickableTileEntity tickableBlockEntity;
     BlockState blockState = this.level.getBlockState(pos);
     Block block = blockState.getBlock();
     if (TimeGemAPI.INSTANCE.isBlockBlacklisted(block))
       return;
-    Objects.requireNonNull(Config.INSTANCE);
+
     if (this.level instanceof ServerWorld && block.isRandomlyTicking(blockState) && this.level.getRandom().nextInt(MathHelper.clamp(4096 / this.speed * 4, 1, 4096)) < randomTicks)
       blockState.randomTick((ServerWorld)this.level, pos, this.level.getRandom());
     TileEntity blockEntity = this.level.getBlockEntity(pos);

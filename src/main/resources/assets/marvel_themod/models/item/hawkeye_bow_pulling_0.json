@@ -1,0 +1,6 @@
+{
+  "parent": "item/bow",
+  "textures": {
+    "layer0": "marvel_themod:items/hawkeye_bow_pulling_0"
+  }
+}
