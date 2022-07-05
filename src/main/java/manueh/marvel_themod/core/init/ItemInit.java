@@ -67,7 +67,7 @@ public class ItemInit {
     //HAWK EYE
     public static final RegistryObject<Item> HAWK_EYE_BOW = ITEMS.register("hawkeye_bow", () -> new HawkEyeBow(new Item.Properties().tab(Main.GROUP).durability(800).setNoRepair().fireResistant()));
 
-
+/*
     public static final RegistryObject<BlockItem> TIME_GEM = ITEMS.register("time_gem",
-            () -> new BlockItem(BlockInit.TIME_GEM_BLOCK.get(), new Item.Properties().tab(Main.GROUP)));
+            () -> new BlockItem(BlockInit.TIME_GEM_BLOCK.get(), new Item.Properties().tab(Main.GROUP))); */
 }

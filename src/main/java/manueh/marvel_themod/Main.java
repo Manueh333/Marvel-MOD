@@ -43,15 +43,16 @@ public class Main
         bus.addListener(this::setup);
         //bus.addListener(this::clientSetup);
         bus.addListener(ClientSetup::clientSetup);
+
+        ItemInit.ITEMS.register(bus);
+        TileEntityTypeInit.TILE_ENTITY_TYPE.register(bus);
+        BlockInit.BLOCKS.register(bus);
+        EntityTypesInit.ENTITY_TYPES.register(bus);
         TimeGemAPI.INSTANCE.blacklistBlock(Blocks.WATER);
         TimeGemAPI.INSTANCE.blacklistBlock(Blocks.LAVA);
         TimeGemAPI.INSTANCE.blacklistBlock(Blocks.AIR);
         TimeGemAPI.INSTANCE.blacklistBlock(Blocks.CAVE_AIR);
         TimeGemAPI.INSTANCE.blacklistBlock(Blocks.VOID_AIR);
-        ItemInit.ITEMS.register(bus);
-        TileEntityTypeInit.TILE_ENTITY_TYPE.register(bus);
-        BlockInit.BLOCKS.register(bus);
-        EntityTypesInit.ENTITY_TYPES.register(bus);
 
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, OreGeneration::generateOres);
         MinecraftForge.EVENT_BUS.register(this);

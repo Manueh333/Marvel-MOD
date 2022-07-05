@@ -23,6 +23,7 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.common.thread.SidedThreadGroups;
 
 import java.util.Objects;
 
@@ -37,7 +38,7 @@ public class TimeGemBlockEntity extends TileEntity implements INameable, ITickab
   
   private int zRange = 5;
   
-  private int speed = 4;
+  private int speed = 10;
   
   private int redstoneMode;
   
@@ -75,35 +76,36 @@ public class TimeGemBlockEntity extends TileEntity implements INameable, ITickab
   public ITextComponent getName() {
     return hasCustomName() ? this.customName : (ITextComponent)new TranslationTextComponent(getBlockState().getBlock().getDescriptionId());
   }
+
+
   @Override
   public void onLoad() {
 
-    if (this.getLevel().isClientSide())
+    if (level.isClientSide)
       return;
 
     this.area = BlockPos.betweenClosed(this.worldPosition.getX() - this.xRange, this.getBlockPos().getY() - this.yRange, this.getBlockPos().getZ() - this.zRange, this.getBlockPos()
         .getX() + this.xRange, this.getBlockPos().getY() + this.yRange, this.getBlockPos().getZ() + this.zRange);
+
     this.level.getServer().addTickable((Runnable)new TickDelayedTask(this.level.getServer().getTickCount(), () -> getBlockState().neighborChanged(this.level, this.getBlockPos(), null, null, false)));
   }
-
+  private boolean inTick = false;
   @Override
   public void tick() {
+    if (inTick) return;
+    inTick = true;
     if (this.speed == 0 || (this.xRange == 0 && this.yRange == 0 && this.zRange == 0))
       return;
-    if (this.getLevel().isClientSide())
-      return;
+
+    if(!level.isClientSide) {
     randomTicks = this.level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING);
-    tickBlockArea();
-  }
-
-
-  @OnlyIn(Dist.DEDICATED_SERVER)
-  private void tickBlockArea() {
     this.area.forEach(this::tickBlock);
-  }
-@OnlyIn(Dist.DEDICATED_SERVER)
+      inTick = false;
+    }}
+
+
   private void tickBlock(BlockPos pos) {
-    if (this.getLevel().isClientSide())
+    if (level.isClientSide)
       return;
     ITickableTileEntity tickableBlockEntity;
     BlockState blockState = this.level.getBlockState(pos);
@@ -112,9 +114,13 @@ public class TimeGemBlockEntity extends TileEntity implements INameable, ITickab
       return;
 
     if (this.level instanceof ServerWorld && block.isRandomlyTicking(blockState) && this.level.getRandom().nextInt(MathHelper.clamp(4096 / this.speed * 4, 1, 4096)) < randomTicks)
-      blockState.randomTick((ServerWorld)this.level, pos, this.level.getRandom());
+      for (int i = 0; i < this.speed &&
+              !blockState.isAir(); i++)
+        blockState.randomTick((ServerWorld)this.level, pos, this.level.getRandom());
+
+
     TileEntity blockEntity = this.level.getBlockEntity(pos);
-    if (blockEntity != null && !blockEntity.isRemoved() && !TimeGemAPI.INSTANCE.isBlockEntityBlacklisted(blockEntity.getType())) {
+    if (blockEntity != null && !blockEntity.isRemoved() && !(blockEntity instanceof TimeGemBlockEntity)) {
       TileEntity tileEntity = blockEntity;
       if (tileEntity instanceof ITickableTileEntity) {
         tickableBlockEntity = (ITickableTileEntity)tileEntity;
@@ -123,11 +129,15 @@ public class TimeGemBlockEntity extends TileEntity implements INameable, ITickab
       } 
     } else {
       return;
-    } 
+    }
+    if(!level.isClientSide) {
+
     for (int i = 0; i < this.speed && 
       !blockEntity.isRemoved(); i++)
       tickableBlockEntity.tick();
-  }
+
+    }
+    }
   
  /* public boolean readClientData(int xRange, int zRange, int yRange, int speed, int redstoneMode) {
     Tier tier = (Tier) TimeGemAPI.INSTANCE.getTiers().get(getTier());
