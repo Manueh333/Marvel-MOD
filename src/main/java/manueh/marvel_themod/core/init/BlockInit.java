@@ -44,6 +44,6 @@ public class BlockInit {
 
 
     public static final RegistryObject<Block> TIME_GEM_BLOCK = BLOCKS.register("time_gem",
-            () -> new TimeGemBlock(AbstractBlock.Properties.copy(Blocks.TORCH), new ResourceLocation("marvel_themod", "normal")));
+            () -> new TimeGemBlock(AbstractBlock.Properties.copy(Blocks.BEDROCK).noCollission(), new ResourceLocation("marvel_themod", "normal")));
 
 }

@@ -52,6 +52,7 @@ import java.util.UUID;
 public class InfinityGauntlet extends Item {
     public InfinityGauntlet(Properties properties) {
         super(properties);
+
     }
 
     @Override
@@ -59,10 +60,23 @@ public class InfinityGauntlet extends Item {
         ItemStack stack = p.getItemInHand(hand);
         if(p.isShiftKeyDown()) {
             int gem = stack.getOrCreateTag().getInt("gem");
-            gem++;
-            if(gem > 5) {
-                gem = 0;
+
+            boolean tried = false;
+            for(int i = 0; i < 10; i++)
+            {
+                if(!hasGem(stack, gem)) {
+                    gem++;
+                    if(gem > 5.1 && !tried) {
+                        gem = 0;
+                        tried = true;
+                    }
+                    if(gem > 5.1 && tried) {
+                        gem = 6;
+                    }
+                }
             }
+
+
             stack.getTag().putInt("gem", gem);
             if(level.isClientSide) {
                 p.sendMessage(new TranslationTextComponent("item.marvel_themod.infinity_gauntlet.gem_message", getGemName(stack)), Util.NIL_UUID);
@@ -119,10 +133,23 @@ public class InfinityGauntlet extends Item {
         ItemStack stack = context.getItemInHand();
         if(context.getPlayer().isShiftKeyDown()) {
             int gem = stack.getOrCreateTag().getInt("gem");
-            gem++;
-            if(gem > 5) {
-                gem = 0;
+
+            boolean tried = false;
+            for(int i = 0; i < 10; i++)
+            {
+                if(!hasGem(stack, gem)) {
+                    gem++;
+                    if(gem > 5.1 && !tried) {
+                        gem = 0;
+                        tried = true;
+                    }
+                    if(gem > 5.1 && tried) {
+                        gem = 6;
+                    }
+                }
             }
+
+
             stack.getTag().putInt("gem", gem);
             if(world.isClientSide) {
                context.getPlayer().sendMessage(new TranslationTextComponent("item.marvel_themod.infinity_gauntlet.gem_message", getGemName(stack)), Util.NIL_UUID);
@@ -130,13 +157,9 @@ public class InfinityGauntlet extends Item {
         }else if(getGem(context.getItemInHand()) == 0) {
             BlockPos blockpos = context.getClickedPos();
             BlockPos blockpos1 = blockpos.relative(context.getClickedFace());
-            if (applyBonemeal(context.getItemInHand(), world, blockpos, context.getPlayer())) {
-                if (!world.isClientSide) {
-                    world.levelEvent(2005, blockpos, 0);
-                }
-
+            world.setBlockAndUpdate(blockpos1, BlockInit.TIME_GEM_BLOCK.get().defaultBlockState());
                 return ActionResultType.sidedSuccess(world.isClientSide);
-            }
+
 
         }else if(getGem(stack) == 3) {
           /*  if(world.isRaining()) {
@@ -183,26 +206,7 @@ public class InfinityGauntlet extends Item {
         }
         return ActionResultType.sidedSuccess(world.isClientSide);
     }
-    public static boolean applyBonemeal(ItemStack p_195966_0_, World p_195966_1_, BlockPos p_195966_2_, net.minecraft.entity.player.PlayerEntity player) {
-        BlockState blockstate = p_195966_1_.getBlockState(p_195966_2_);
-        int hook = net.minecraftforge.event.ForgeEventFactory.onApplyBonemeal(player, p_195966_1_, p_195966_2_, blockstate, p_195966_0_);
-        if (hook != 0) return hook > 0;
-        if (blockstate.getBlock() instanceof IGrowable) {
-            IGrowable igrowable = (IGrowable)blockstate.getBlock();
-            if (igrowable.isValidBonemealTarget(p_195966_1_, p_195966_2_, blockstate, p_195966_1_.isClientSide)) {
-                if (p_195966_1_ instanceof ServerWorld) {
-                    if (igrowable.isBonemealSuccess(p_195966_1_, p_195966_1_.random, p_195966_2_, blockstate)) {
-                        igrowable.performBonemeal((ServerWorld)p_195966_1_, p_195966_1_.random, p_195966_2_, blockstate);
-                    }
 
-                }
-
-                return true;
-            }
-        }
-
-        return false;
-    }
     @Override
     public void appendHoverText(ItemStack stack, @Nullable World level, List<ITextComponent> tooltip, ITooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
@@ -231,6 +235,14 @@ public class InfinityGauntlet extends Item {
     public int getGem(ItemStack stack) {
         return stack.hasTag() ? stack.getTag().getInt("gem") : 0;
     }
+
+    public boolean hasGem(ItemStack stack, int gem) {
+        if(gem == 6) {
+            return true;
+        }
+        return stack.hasTag() ? stack.getTag().getBoolean("hasGem." + gem) : false;
+    }
+
 
     public TranslationTextComponent getGemName(ItemStack stack) {
 
@@ -262,7 +274,10 @@ public class InfinityGauntlet extends Item {
 
     public void setTag(String name, CompoundNBT compoundNBT, ItemStack stack) {
         stack.getTag().put("EntityData", compoundNBT);
+
     }
+
+
     public INBT getTag(String name, ItemStack stack) {
         return stack.getOrCreateTag().get(name);
     }

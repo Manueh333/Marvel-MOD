@@ -2,14 +2,13 @@ package manueh.marvel_themod.common.blocks;
 
 import manueh.marvel_themod.common.entity.TimeGemBlockEntity;
 import manueh.marvel_themod.core.enums.TierSupplier;
+import manueh.marvel_themod.core.init.ItemInit;
 import manueh.marvel_themod.core.init.TileEntityTypeInit;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.*;
 import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
@@ -17,6 +16,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -32,7 +33,24 @@ public final class TimeGemBlock extends Block implements ITileEntityProvider, Ti
     this.tierID = tier;
 
   }
-  
+
+  @Override
+  public Item asItem() {
+    return ItemInit.INFINITY_GAUNTLET.get();
+  }
+  protected static final VoxelShape SHAPE = Block.box(5.0D, 6.0D, 5.0D, 11.0D, 10.0D, 11.0D);
+
+  public VoxelShape getShape(BlockState p_220053_1_, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
+    return SHAPE;
+  }
+  @Override
+  public ActionResultType use(BlockState blockState, World world, BlockPos blockPos, PlayerEntity player, Hand hand, BlockRayTraceResult blockRayTraceResult) {
+    if(player.getItemInHand(hand).sameItemStackIgnoreDurability(ItemInit.INFINITY_GAUNTLET.get().getDefaultInstance()))
+    world.destroyBlock(blockPos, true);
+    return ActionResultType.SUCCESS;
+  }
+
+
   public ResourceLocation getTier() {
     return this.tierID;
   }
