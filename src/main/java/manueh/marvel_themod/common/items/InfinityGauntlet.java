@@ -1,6 +1,7 @@
 package manueh.marvel_themod.common.items;
 
 import manueh.marvel_themod.Main;
+import manueh.marvel_themod.client.ClientEvents;
 import manueh.marvel_themod.common.containers.InfinityGauntletCapabilityProvider;
 import manueh.marvel_themod.common.containers.InfinityGauntletContainer;
 import manueh.marvel_themod.common.containers.InfinityGauntletItemStackHandler;
@@ -366,9 +367,9 @@ public class InfinityGauntlet extends Item {
 
         private final ItemStack backpackStack;
 
-        public InfinityGauntletContainerProvider(Item item, ItemStack stack) {
+        public InfinityGauntletContainerProvider(InfinityGauntlet item, ItemStack stack) {
 
-            this.backpackItem = (InfinityGauntlet) item;
+            this.backpackItem = item;
 
             this.backpackStack = stack;
         }
@@ -406,7 +407,7 @@ public class InfinityGauntlet extends Item {
         if(sneakPressed) {
             tooltip.add(new TranslationTextComponent("tooltip.marvel_themod.infinity_gauntlet_1"));
             if(getGem(stack) == 6)
-            tooltip.add(new TranslationTextComponent("tooltip.marvel_themod.infinity_gauntlet_second_" + getGem(stack)));
+            tooltip.add(new TranslationTextComponent("tooltip.marvel_themod.infinity_gauntlet_second_" + getGem(stack), ClientEvents.keyOpenGauntlet.getKey().getDisplayName()));
         }else {
             tooltip.add(new TranslationTextComponent("tooltip.marvel_themod.hold_shift"));
         }

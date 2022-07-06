@@ -36,8 +36,8 @@ public class InputMessage {
         context.enqueueWork( () ->
                 {
                     ServerPlayerEntity player = context.getSender();
-                    ItemInit.INFINITY_GAUNTLET.get().openGUI((InfinityGauntlet) player.getMainHandItem().getItem(), message.stack, player);
-
+                    INamedContainerProvider ncp = new InfinityGauntlet.InfinityGauntletContainerProvider((InfinityGauntlet)player.getMainHandItem().getItem(), message.stack);
+                    NetworkHooks.openGui((ServerPlayerEntity)player, ncp);
                 }
                 );
         context.setPacketHandled(true);

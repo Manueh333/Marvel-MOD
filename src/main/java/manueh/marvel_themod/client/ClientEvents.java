@@ -2,6 +2,7 @@ package manueh.marvel_themod.client;
 
 import com.ibm.icu.impl.UResource;
 import manueh.marvel_themod.Main;
+import manueh.marvel_themod.common.containers.InfinityGauntletScreen;
 import manueh.marvel_themod.common.items.InfinityGauntlet;
 import manueh.marvel_themod.core.init.ItemInit;
 import manueh.marvel_themod.core.network.Network;
@@ -66,6 +67,7 @@ import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
 import javax.swing.text.JTextComponent;
+import java.time.chrono.MinguoEra;
 
 @Mod.EventBusSubscriber(modid = Main.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientEvents {
@@ -78,14 +80,15 @@ public class ClientEvents {
 
 
     @SubscribeEvent
-    public static void gauntletGUI(final TickEvent.PlayerTickEvent event) {
+    public static void gauntletGUI(TickEvent.PlayerTickEvent event) {
         PlayerEntity player = event.player;
-        ItemStack stack = event.player.getMainHandItem();
+        ItemStack stack = event.player.getItemBySlot(EquipmentSlotType.MAINHAND);
 
         if (keyOpenGauntlet.isDown() && keyOpenGauntlet.consumeClick() && stack.getItem().equals(ItemInit.INFINITY_GAUNTLET.get())) {
             Main.NETWORK.sendToServer(new InputMessage(stack));
         }
     }
+
     @SubscribeEvent
     public static void activateFly(final TickEvent.PlayerTickEvent event) {
         PlayerEntity player = event.player;
