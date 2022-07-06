@@ -3,10 +3,8 @@ package manueh.marvel_themod;
 import manueh.marvel_themod.client.ClientSetup;
 import manueh.marvel_themod.core.enums.KeyConflictNone;
 import manueh.marvel_themod.core.enums.TimeGemAPI;
-import manueh.marvel_themod.core.init.BlockInit;
-import manueh.marvel_themod.core.init.EntityTypesInit;
-import manueh.marvel_themod.core.init.ItemInit;
-import manueh.marvel_themod.core.init.TileEntityTypeInit;
+import manueh.marvel_themod.core.init.*;
+import manueh.marvel_themod.core.network.Network;
 import manueh.marvel_themod.world.OreGeneration;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.settings.KeyBinding;
@@ -26,6 +24,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
@@ -37,7 +36,7 @@ public class Main
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MODID = "marvel_themod";
     public static final ItemGroup GROUP = new MainTab("marvel_themod");
-
+    public static SimpleChannel NETWORK;
     public Main() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(this::setup);
@@ -53,13 +52,14 @@ public class Main
         TimeGemAPI.INSTANCE.blacklistBlock(Blocks.AIR);
         TimeGemAPI.INSTANCE.blacklistBlock(Blocks.CAVE_AIR);
         TimeGemAPI.INSTANCE.blacklistBlock(Blocks.VOID_AIR);
-
+        ContainerInit.register(bus);
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, OreGeneration::generateOres);
         MinecraftForge.EVENT_BUS.register(this);
+
     }
 
     private void setup(final FMLCommonSetupEvent event) {
-
+        NETWORK = Network.register();
     }
 
     public static class MainTab extends ItemGroup {

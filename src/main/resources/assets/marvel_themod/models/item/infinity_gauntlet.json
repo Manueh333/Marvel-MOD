@@ -2,7 +2,7 @@
   "credit": "Made with Blockbench by Manueh_",
   "texture_size": [64, 64],
   "textures": {
-    "layer0": "marvel_themod:items/infinity_gauntlet_0"
+    "layer0": "marvel_themod:items/infinity_gauntlet_6"
   },
   "overrides": [
     {
@@ -40,6 +40,12 @@
         "marvel_themod:gem": 5.0
       },
       "model": "marvel_themod:item/infinity_gauntlet_5"
+    },
+    {
+      "predicate": {
+        "marvel_themod:gem": 6.0
+      },
+      "model": "marvel_themod:item/infinity_gauntlet_6"
     }
   ]
 }

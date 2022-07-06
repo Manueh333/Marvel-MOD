@@ -60,9 +60,24 @@ public class ItemInit {
 
     //INFINITY GAUNTLET
     public static final RegistryObject<InfinityGauntlet> INFINITY_GAUNTLET = ITEMS.register("infinity_gauntlet", () -> new InfinityGauntlet(new Item.Properties().stacksTo(1).tab(Main.GROUP).fireResistant()));
-    public static final RegistryObject<Item> POWER_GEM = ITEMS.register("power_gem", () -> new Item(new Item.Properties().stacksTo(1)));
+
     public static final RegistryObject<BlockItem> CORRUPTED_BLOCK = ITEMS.register("corrupted_block",
             () -> new BlockItem(BlockInit.CORRUPTED_BLOCK.get(), new Item.Properties().tab(Main.GROUP)));
+
+
+    //GEMS
+    public static final RegistryObject<Item> TIME_GEM = ITEMS.register("time_gem",
+            () -> new Item(new Item.Properties().tab(Main.GROUP).stacksTo(1).fireResistant()));
+    public static final RegistryObject<Item> POWER_GEM = ITEMS.register("power_gem",
+            () -> new Item(new Item.Properties().tab(Main.GROUP).stacksTo(1).fireResistant()));
+    public static final RegistryObject<Item> SPACE_GEM = ITEMS.register("space_gem",
+            () -> new Item(new Item.Properties().tab(Main.GROUP).stacksTo(1).fireResistant()));
+    public static final RegistryObject<Item> REALITY_GEM = ITEMS.register("reality_gem",
+            () -> new Item(new Item.Properties().tab(Main.GROUP).stacksTo(1).fireResistant()));
+    public static final RegistryObject<Item> SOUL_GEM = ITEMS.register("soul_gem",
+            () -> new Item(new Item.Properties().tab(Main.GROUP).stacksTo(1).fireResistant()));
+    public static final RegistryObject<Item> MIND_GEM = ITEMS.register("mind_gem",
+            () -> new Item(new Item.Properties().tab(Main.GROUP).stacksTo(1).fireResistant()));
 
     //HAWK EYE
     public static final RegistryObject<Item> HAWK_EYE_BOW = ITEMS.register("hawkeye_bow", () -> new HawkEyeBow(new Item.Properties().tab(Main.GROUP).durability(800).setNoRepair().fireResistant()));
@@ -70,4 +85,8 @@ public class ItemInit {
 /*
     public static final RegistryObject<BlockItem> TIME_GEM = ITEMS.register("time_gem",
             () -> new BlockItem(BlockInit.TIME_GEM_BLOCK.get(), new Item.Properties().tab(Main.GROUP))); */
+
+
+
+
 }

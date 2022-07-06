@@ -1,6 +1,7 @@
 package manueh.marvel_themod.common.blocks;
 
 import manueh.marvel_themod.common.entity.TimeGemBlockEntity;
+import manueh.marvel_themod.common.items.InfinityGauntlet;
 import manueh.marvel_themod.core.enums.TierSupplier;
 import manueh.marvel_themod.core.init.ItemInit;
 import manueh.marvel_themod.core.init.TileEntityTypeInit;
@@ -10,6 +11,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -45,8 +47,10 @@ public final class TimeGemBlock extends Block implements ITileEntityProvider, Ti
   }
   @Override
   public ActionResultType use(BlockState blockState, World world, BlockPos blockPos, PlayerEntity player, Hand hand, BlockRayTraceResult blockRayTraceResult) {
-    if(player.getItemInHand(hand).sameItemStackIgnoreDurability(ItemInit.INFINITY_GAUNTLET.get().getDefaultInstance()))
-    world.destroyBlock(blockPos, true);
+    if(player.getItemInHand(hand).sameItemStackIgnoreDurability(ItemInit.INFINITY_GAUNTLET.get().getDefaultInstance())) {
+      ItemInit.INFINITY_GAUNTLET.get().setSlot(player.getItemInHand(hand), 0, ItemInit.TIME_GEM.get().getDefaultInstance());
+      world.destroyBlock(blockPos, true);
+    }
     return ActionResultType.SUCCESS;
   }
 

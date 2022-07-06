@@ -2,10 +2,13 @@ package manueh.marvel_themod.client;
 
 import manueh.marvel_themod.Main;
 import manueh.marvel_themod.common.PowerGemRenderer;
+import manueh.marvel_themod.common.containers.InfinityGauntletScreen;
 import manueh.marvel_themod.common.items.InfinityGauntlet;
 import manueh.marvel_themod.core.enums.ModItemModelProperties;
+import manueh.marvel_themod.core.init.ContainerInit;
 import manueh.marvel_themod.core.init.EntityTypesInit;
 import manueh.marvel_themod.core.init.ItemInit;
+import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -18,11 +21,13 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 public class ClientSetup {
     @SubscribeEvent
-    public static void clientSetup(FMLClientSetupEvent event) {
+    public static void clientSetup(final FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             ClientRegistry.registerKeyBinding(ClientEvents.keyFly);
+            ClientRegistry.registerKeyBinding(ClientEvents.keyOpenGauntlet);
             RenderingRegistry.registerEntityRenderingHandler(EntityTypesInit.POWER_GEM.get(), PowerGemRenderer::new);
             initTestItemOverrides();
+            ScreenManager.register(ContainerInit.INFINITY_GAUNTLET_CONTAINER.get(), InfinityGauntletScreen::new);
         });
         ModItemModelProperties.makeBow(ItemInit.HAWK_EYE_BOW.get());
     }

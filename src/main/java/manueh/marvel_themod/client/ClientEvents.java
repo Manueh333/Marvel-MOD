@@ -4,6 +4,8 @@ import com.ibm.icu.impl.UResource;
 import manueh.marvel_themod.Main;
 import manueh.marvel_themod.common.items.InfinityGauntlet;
 import manueh.marvel_themod.core.init.ItemInit;
+import manueh.marvel_themod.core.network.Network;
+import manueh.marvel_themod.core.network.message.InputMessage;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.Keyboard;
@@ -20,7 +22,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.item.ItemStack;
@@ -56,6 +60,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.network.NetworkHooks;
 import org.lwjgl.glfw.GLFW;
 
 
@@ -66,10 +71,21 @@ import javax.swing.text.JTextComponent;
 public class ClientEvents {
 
     public static final KeyBinding keyFly = new KeyBinding("key.marvel_themod.fly", GLFW.GLFW_KEY_LEFT_ALT, "key.categories.marvel_themod");
+    public static final KeyBinding keyOpenGauntlet = new KeyBinding("key.marvel_themod.openInfinityGauntlet", GLFW.GLFW_KEY_B, "key.categories.marvel_themod");
 
 
     private static boolean flying = false;
 
+
+    @SubscribeEvent
+    public static void gauntletGUI(final TickEvent.PlayerTickEvent event) {
+        PlayerEntity player = event.player;
+        ItemStack stack = event.player.getMainHandItem();
+
+        if (keyOpenGauntlet.isDown() && keyOpenGauntlet.consumeClick() && stack.getItem().equals(ItemInit.INFINITY_GAUNTLET.get())) {
+            Main.NETWORK.sendToServer(new InputMessage(stack));
+        }
+    }
     @SubscribeEvent
     public static void activateFly(final TickEvent.PlayerTickEvent event) {
         PlayerEntity player = event.player;
