@@ -1,76 +1,39 @@
 package manueh.marvel_themod.client;
 
-import com.ibm.icu.impl.UResource;
 import manueh.marvel_themod.Main;
-import manueh.marvel_themod.common.containers.InfinityGauntletScreen;
-import manueh.marvel_themod.common.items.InfinityGauntlet;
 import manueh.marvel_themod.core.init.ItemInit;
-import manueh.marvel_themod.core.network.Network;
+import manueh.marvel_themod.core.init.ParticlesInit;
 import manueh.marvel_themod.core.network.message.InputMessage;
-import net.java.games.input.Component;
-import net.java.games.input.Controller;
-import net.java.games.input.Keyboard;
-import net.minecraft.advancements.criterion.InventoryChangeTrigger;
+import manueh.marvel_themod.core.network.message.PacketChangeArmorEntity;
+import manueh.marvel_themod.core.network.message.PacketDamageEntity;
 import net.minecraft.client.GameSettings;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.CloudParticle;
-import net.minecraft.client.particle.WhiteAshParticle;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.HurtByTargetGoal;
-import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.IItemPropertyGetter;
-import net.minecraft.item.ItemModelsProperties;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.INBT;
-import net.minecraft.particles.IParticleData;
+import net.minecraft.item.*;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.particles.RedstoneParticleData;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.*;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
-import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.network.NetworkHooks;
 import org.lwjgl.glfw.GLFW;
 
 
-import javax.annotation.Nullable;
-import javax.swing.text.JTextComponent;
-import java.time.chrono.MinguoEra;
+import java.util.Optional;
 
 @Mod.EventBusSubscriber(modid = Main.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientEvents {
+
+    public static final KeyBinding shootIronManBeam = new KeyBinding("key.marvel_themod.shootIronManBeam", GLFW.GLFW_KEY_C, "key.categories.marvel_themod");
+    public static final KeyBinding equipIronManArmor = new KeyBinding("key.marvel_themod.equipIronManArmor", GLFW.GLFW_KEY_Z, "key.categories.marvel_themod");
 
     public static final KeyBinding keyFly = new KeyBinding("key.marvel_themod.fly", GLFW.GLFW_KEY_LEFT_ALT, "key.categories.marvel_themod");
     public static final KeyBinding keyOpenGauntlet = new KeyBinding("key.marvel_themod.openInfinityGauntlet", GLFW.GLFW_KEY_B, "key.categories.marvel_themod");
@@ -80,24 +43,65 @@ public class ClientEvents {
 
 
     @SubscribeEvent
-    public static void gauntletGUI(TickEvent.PlayerTickEvent event) {
-        PlayerEntity player = event.player;
-        ItemStack stack = event.player.getItemBySlot(EquipmentSlotType.MAINHAND);
+    public static void gauntletGUI(final TickEvent.ClientTickEvent event) {
+        PlayerEntity player = Minecraft.getInstance().player;
+        if(player != null)  {
+            ItemStack stack = player.getMainHandItem();
 
-        if (keyOpenGauntlet.isDown() && keyOpenGauntlet.consumeClick() && stack.getItem().equals(ItemInit.INFINITY_GAUNTLET.get())) {
-            Main.NETWORK.sendToServer(new InputMessage(stack));
+            if (keyOpenGauntlet.isDown() && stack.getItem().equals(ItemInit.INFINITY_GAUNTLET.get())) {
+                Main.NETWORK.sendToServer(new InputMessage());
+            }
         }
+
     }
 
     @SubscribeEvent
-    public static void activateFly(final TickEvent.PlayerTickEvent event) {
+    public static void particles(final TickEvent.ClientTickEvent event) {
+        Main.timer++;
+
+        PlayerEntity p = Minecraft.getInstance().player;
+        if(p != null) {
+            World level =  p.getCommandSenderWorld();
+            if(Main.makeTeleportAnimation && Main.timer > 1) {
+                for (double x = -1; x < 1; x += 0.33) {
+                    p.getCommandSenderWorld().addParticle(ParticlesInit.SPACE_GEM_PARTICLE.get(), p.position().x + x, p.position().y, p.position().z, 0, -0.3, 0);
+
+                    for (double y = -1; y < 3; y += 0.33) {
+                        p.getCommandSenderWorld().addParticle(ParticlesInit.SPACE_GEM_PARTICLE.get(), p.position().x + x, p.position().y + y, p.position().z, 0, -0.3, 0);
+
+                        for (double z = -1; z < 1; z += 0.33) {
+                            p.getCommandSenderWorld().addParticle(ParticlesInit.SPACE_GEM_PARTICLE.get(), p.position().x + x, p.position().y + y, p.position().z + z, 0, -0.3, 0);
+
+                        }
+                    }
+
+                    Main.makeTeleportAnimation = false;
+
+
+                }
+            }
+
+
+
+        }
+
+    }
+
+    public static boolean changingArmor = false;
+    @SubscribeEvent
+    public static void ironManTickEvent(final TickEvent.PlayerTickEvent event) {
         PlayerEntity player = event.player;
+
         if(player != null) {
             GameSettings settings = Minecraft.getInstance().options;
             KeyBinding jump = settings.keyJump;
             KeyBinding crouch = settings.keyShift;
             KeyBinding fly = ClientEvents.keyFly;
-            if(player.getItemBySlot(EquipmentSlotType.HEAD).getStack().sameItemStackIgnoreDurability(ItemInit.IRONMAN_HELMET.get().getDefaultInstance()) && player.getItemBySlot(EquipmentSlotType.CHEST).getStack().sameItemStackIgnoreDurability(ItemInit.IRONMAN_CHESTPLATE.get().getDefaultInstance()) && player.getItemBySlot(EquipmentSlotType.LEGS).getStack().sameItemStackIgnoreDurability(ItemInit.IRONMAN_LEGGINS.get().getDefaultInstance()) && player.getItemBySlot(EquipmentSlotType.FEET).getStack().sameItemStackIgnoreDurability(ItemInit.IRONMAN_BOOTS.get().getDefaultInstance())) {
+            KeyBinding shoot = ClientEvents.shootIronManBeam;
+            KeyBinding equip = ClientEvents.equipIronManArmor;
+            World level = player.level;
+
+            if(fullIronManArmor(player)) {
                 if(flying) {
                     if(jump.isDown()) {
                         player.setDeltaMovement(player.getDeltaMovement().x,0.3f, player.getDeltaMovement().z);
@@ -111,7 +115,11 @@ public class ClientEvents {
                     }
 
                 }
-
+                if(equipIronManArmor.consumeClick() && !changingArmor)
+                {
+                    Main.NETWORK.sendToServer(new PacketChangeArmorEntity(player.getId()));
+                    changingArmor = true;
+                }
                 if(fly.consumeClick()) {
                     flying = !flying;
                     if(flying) {
@@ -124,11 +132,96 @@ public class ClientEvents {
                 player.fallDistance = 0;
 
 
+                if(shoot.isDown()) {
 
+                    Double rayLength = new Double(100);
+                    Vector3d playerRotation = player.getViewVector(0);
+                    Vector3d rayPath = playerRotation.scale(rayLength);
+
+                    //RAY START AND END POINTS
+                    Vector3d from = player.getEyePosition(0);
+                    Vector3d to = from.add(rayPath);
+                    Entity entity = null;
+
+                    EntityRayTraceResult entityRayTraceResult = getPlayerPOVHitResult(player);
+
+                    if (entityRayTraceResult != null) {
+                        if (entityRayTraceResult.getType() == RayTraceResult.Type.ENTITY) {
+                            entity = entityRayTraceResult.getEntity();
+                     }
+                        if (!level.isClientSide && entity != null) {
+                            Main.NETWORK.sendToServer(new PacketDamageEntity(entity.getId(), 10F));
+                        }
+                    }
+                    if (level.isClientSide) {
+
+                        Vector3d playerAngle = player.getLookAngle();
+                        for (double i = 0; i < 100; i += 0.33) {
+                            level.addParticle(ParticlesInit.IRONMAN_BEAM_PARTICLE.get(), player.getEyePosition(0).x + (playerAngle.x * i), player.getEyePosition(0).y + (playerAngle.y * i), player.getEyePosition(0).z + (playerAngle.z * i), 0, 0, 0);
+
+                        }
+                    }
+                }
+
+           }else if( !changingArmor && equipIronManArmor.consumeClick() && player.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ItemInit.REACTOR.get())
+           {
+               Main.NETWORK.sendToServer(new PacketChangeArmorEntity(player.getId()));
+               changingArmor = true;
            }
+
+
         }
     }
 
+
+    private static boolean fullIronManArmor(PlayerEntity player) {
+        return player.getItemBySlot(EquipmentSlotType.FEET).getItem() == (ItemInit.IRONMAN_BOOTS.get()) && player.getItemBySlot(EquipmentSlotType.LEGS).getItem() == ItemInit.IRONMAN_LEGGINS.get() && player.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ItemInit.IRONMAN_CHESTPLATE.get() && player.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ItemInit.IRONMAN_HELMET.get();
+
+    }
+
+    public static EntityRayTraceResult getPlayerPOVHitResult(PlayerEntity player) {
+        float playerRotX = player.getViewXRot(0);
+        float playerRotY = player.getViewYRot(0);
+        Vector3d startPos = player.getEyePosition(0);
+        float f2 = MathHelper.cos(-playerRotY * ((float) Math.PI / 180F) - (float) Math.PI);
+        float f3 = MathHelper.sin(-playerRotY * ((float) Math.PI / 180F) - (float) Math.PI);
+        float f4 = -MathHelper.cos(-playerRotX * ((float) Math.PI / 180F));
+        float additionY = MathHelper.sin(-playerRotX * ((float) Math.PI / 180F));
+        float additionX = f3 * f4;
+        float additionZ = f2 * f4;
+        double d0 = 1000;
+        Vector3d endVec = startPos.add((double) additionX * d0, (double) additionY * d0, (double) additionZ * d0);
+        AxisAlignedBB startEndBox = new AxisAlignedBB(startPos, endVec);
+        Entity entity = null;
+        for (Entity entity1 : player.level.getEntities(player, startEndBox, (val) -> true)) {
+            AxisAlignedBB aabb = entity1.getBoundingBox().inflate(entity1.getPickRadius());
+            Optional<Vector3d> optional = aabb.clip(startPos, endVec);
+            if (aabb.contains(startPos)) {
+                if (d0 >= 0.0D) {
+                    entity = entity1;
+                    startPos = optional.orElse(startPos);
+                    d0 = 0.0D;
+                }
+            } else if (optional.isPresent()) {
+                Vector3d vec31 = optional.get();
+                double d1 = startPos.distanceToSqr(vec31);
+                if (d1 < d0 || d0 == 0.0D) {
+                    if (entity1.getRootVehicle() == player.getRootVehicle() && !entity1.canRiderInteract()) {
+                        if (d0 == 0.0D) {
+                            entity = entity1;
+                            startPos = vec31;
+                        }
+                    } else {
+                        entity = entity1;
+                        startPos = vec31;
+                        d0 = d1;
+                    }
+                }
+            }
+        }
+
+        return (entity == null) ? null : new EntityRayTraceResult(entity);
+    }
     @OnlyIn(Dist.CLIENT)
     public static void changeWalkSpeed(PlayerEntity player, float speed) {
         player.abilities.setWalkingSpeed(speed);

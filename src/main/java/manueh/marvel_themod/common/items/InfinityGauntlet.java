@@ -2,13 +2,14 @@ package manueh.marvel_themod.common.items;
 
 import manueh.marvel_themod.Main;
 import manueh.marvel_themod.client.ClientEvents;
-import manueh.marvel_themod.common.containers.InfinityGauntletCapabilityProvider;
-import manueh.marvel_themod.common.containers.InfinityGauntletContainer;
-import manueh.marvel_themod.common.containers.InfinityGauntletItemStackHandler;
+import manueh.marvel_themod.common.blocks.containers.InfinityGauntletCapabilityProvider;
+import manueh.marvel_themod.common.blocks.containers.InfinityGauntletContainer;
+import manueh.marvel_themod.common.blocks.containers.InfinityGauntletItemStackHandler;
 import manueh.marvel_themod.common.entity.PowerGenEntity;
 import manueh.marvel_themod.core.init.BlockInit;
+import manueh.marvel_themod.core.init.DimensionInit;
 import manueh.marvel_themod.core.init.ItemInit;
-import net.minecraft.block.Blocks;
+import manueh.marvel_themod.world.RealityTeleporter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
@@ -22,25 +23,24 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.particles.RedstoneParticleData;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import org.lwjgl.system.CallbackI;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -63,7 +63,6 @@ public class InfinityGauntlet extends Item {
 
             hasGemInInventory(stack);
 
-            Main.LOGGER.debug("Stack in 0 is: " + getBackpackItemStackHandler(stack).getStackInSlot(0).getItem());
             if (gem == 0) {
                 if (hasGem(stack, 1)) {
                     gem = 1;
@@ -201,17 +200,45 @@ public class InfinityGauntlet extends Item {
                         //IF RAY HIT SOMETHING
                         Vector3d hitLocation = rayHit.getLocation();
                         p.teleportTo(hitLocation.x, hitLocation.y,hitLocation.z);
+                        animateTeleport(level, p);
+
+
                         p.getCooldowns().addCooldown(this, 10);
                         // ItemStack stack = player.getItemInHand(hand);
                         // stack.setDamageValue(stack.getDamageValue() + 1);
 
                         // break if durability gets to 0
                         // if (stack.getDamageValue() == 0) stack.setCount(0);
+
+
+
                     }
                 }
 
+        }else if(getGem(stack) == 3) {
+
+            if (!level.isClientSide()) {
+                MinecraftServer server = level.getServer();
+
+                if (server != null) {
+                    if (level.dimension() == DimensionInit.REALITY_DIMENSION) {
+                        ServerWorld overWorld = server.getLevel(World.OVERWORLD);
+                        if (overWorld != null) {
+                            p.changeDimension(overWorld, new RealityTeleporter(new BlockPos(p.position()), false));
+                        }
+                    } else {
+                        ServerWorld realityDim = server.getLevel(DimensionInit.REALITY_DIMENSION);
+                        if (realityDim != null) {
+                            p.changeDimension(realityDim, new RealityTeleporter(new BlockPos(p.position()), true));
+                        }
+                    }
+
+                }
+
+            }
         }
-        return ActionResult.success(stack);
+
+            return ActionResult.success(stack);
     }
 
 
@@ -249,21 +276,21 @@ public class InfinityGauntlet extends Item {
         }
     }
 
+
+
+    public void animateTeleport(World level, PlayerEntity p) {
+        Main.timer = 0;
+        Main.makeTeleportAnimation = true;
+    }
+
+
+
     @Override
     public ActionResultType useOn(ItemUseContext context) {
         World world = context.getLevel();
         ItemStack stack = context.getItemInHand();
         PlayerEntity player = context.getPlayer();
-        if(context.getPlayer().isShiftKeyDown()) {
-            if(!world.isClientSide) {
-                    INamedContainerProvider ncp = new InfinityGauntletContainerProvider(this, stack);
-                    NetworkHooks.openGui((ServerPlayerEntity)player, ncp);
-
-
-                }
-
-            }
-        else if(getGem(context.getItemInHand()) == 0) {
+        if(getGem(context.getItemInHand()) == 0) {
             BlockPos blockpos = context.getClickedPos();
             BlockPos blockpos1 = blockpos.relative(context.getClickedFace());
             world.setBlockAndUpdate(blockpos1, BlockInit.TIME_GEM_BLOCK.get().defaultBlockState());
@@ -273,15 +300,49 @@ public class InfinityGauntlet extends Item {
 
 
         }else if(getGem(stack) == 3) {
+
+            if (!world.isClientSide()) {
+                    MinecraftServer server = world.getServer();
+
+                    if (server != null) {
+                        if (world.dimension() == DimensionInit.REALITY_DIMENSION) {
+                            ServerWorld overWorld = server.getLevel(World.OVERWORLD);
+                            if (overWorld != null) {
+                                player.changeDimension(overWorld, new RealityTeleporter(new BlockPos(player.position()), false));
+                            }
+                        } else {
+                            ServerWorld realityDim = server.getLevel(DimensionInit.REALITY_DIMENSION);
+                            if (realityDim != null) {
+                                player.changeDimension(realityDim, new RealityTeleporter(new BlockPos(player.position()), true));
+                            }
+                        }
+                        return ActionResultType.SUCCESS;
+                    }
+
+            }
+
+
           /*  if(world.isRaining()) {
                 world.setRainLevel(0);
             }else {
                 world.setRainLevel(2);
 
             }*/
-            if(!context.getLevel().isClientSide()) {
+           /* if(!context.getLevel().isClientSide()) {
+
+                ArrayList<Block> changeBlocks = new ArrayList<Block>();
+                changeBlocks.add(Blocks.STONE);
+                changeBlocks.add(Blocks.GRASS_BLOCK);
+                changeBlocks.add(Blocks.SAND);
+                changeBlocks.add(Blocks.DIRT);
+                changeBlocks.add(Blocks.GRASS_PATH);
+                changeBlocks.add(Blocks.ANDESITE);
+                changeBlocks.add(Blocks.DIORITE);
+                changeBlocks.add(Blocks.GRANITE);
+
+
                 context.getPlayer().getCooldowns().addCooldown(this, 10);
-                world.setBlockAndUpdate(context.getClickedPos(), BlockInit.CORRUPTED_BLOCK.get().defaultBlockState());
+               /* world.setBlockAndUpdate(context.getClickedPos(), BlockInit.CORRUPTED_BLOCK.get().defaultBlockState());
 
                 for(int x = -8; x<8; x++) {
                     if(world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, 0, 0) )) != Blocks.AIR.defaultBlockState() && world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, 0, 0) )) != Blocks.CAVE_AIR.defaultBlockState() && world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, 0, 0) )) != Blocks.VOID_AIR.defaultBlockState()) {
@@ -298,13 +359,40 @@ public class InfinityGauntlet extends Item {
                         }
                     }
                 }
-            }
+
+
+                if(stack.getOrCreateTag().getInt("reality_gem_type") == 0) {
+                    world.setBlockAndUpdate(context.getClickedPos(), Blocks.END_STONE.defaultBlockState());
+
+                    for(int x = -8; x<8; x++) {
+                        if(world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, 0, 0) )) != Blocks.AIR.defaultBlockState() && world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, 0, 0) )) != Blocks.CAVE_AIR.defaultBlockState() && world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, 0, 0) )) != Blocks.VOID_AIR.defaultBlockState() &&  changeBlocks.contains(world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, 0, 0) )).getBlock())) {
+                            world.setBlockAndUpdate(context.getClickedPos().subtract(new Vector3i(x, 0, 0)), Blocks.END_STONE.defaultBlockState());
+                        }
+                        for(int y = -8; y<8; y++) {
+                            if(world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, y, 0) )) != Blocks.AIR.defaultBlockState() && world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, y, 0) )) != Blocks.CAVE_AIR.defaultBlockState() && world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, y, 0) )) != Blocks.VOID_AIR.defaultBlockState() &&  changeBlocks.contains(world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, y, 0) )).getBlock())) {
+                                world.setBlockAndUpdate(context.getClickedPos().subtract(new Vector3i(x, y, 0)), Blocks.END_STONE.defaultBlockState());
+                            }
+                            for(int z = -8; z<8; z++) {
+                                if(world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, y, z) )) != Blocks.AIR.defaultBlockState() && world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, y, z) )) != Blocks.CAVE_AIR.defaultBlockState()
+                                        && world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, y, z) )) != Blocks.VOID_AIR.defaultBlockState() &&  changeBlocks.contains(world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, y, z) )).getBlock())
+                                        ) {
+                                    world.setBlockAndUpdate(context.getClickedPos().subtract(new Vector3i(x, y, z)), Blocks.END_STONE.defaultBlockState());
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }*/
 
         }
         else if(getGem(stack) == 4) {
             CompoundNBT entityData = (CompoundNBT) stack.getTag().get("EntityData");
             if(entityData != null) {
                 Entity entity = EntityType.create(entityData, world).get();
+                if(entity instanceof PlayerEntity) {
+                    return ActionResultType.FAIL;
+                }
                 entity.setPos(context.getClickedPos().getX() + 0.5f, context.getClickedPos().getY() + 1f, context.getClickedPos().getZ() + 0.5f);
                 world.addFreshEntity(entity);
                 stack.getTag().remove("EntityData");
@@ -406,7 +494,7 @@ public class InfinityGauntlet extends Item {
 
         if(sneakPressed) {
             tooltip.add(new TranslationTextComponent("tooltip.marvel_themod.infinity_gauntlet_1"));
-            if(getGem(stack) == 6)
+
             tooltip.add(new TranslationTextComponent("tooltip.marvel_themod.infinity_gauntlet_second_" + getGem(stack), ClientEvents.keyOpenGauntlet.getKey().getDisplayName()));
         }else {
             tooltip.add(new TranslationTextComponent("tooltip.marvel_themod.hold_shift"));

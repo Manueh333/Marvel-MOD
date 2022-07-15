@@ -1,0 +1,56 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "marvel_themod:items/ironman_repulsor",
+		"particle": "marvel_themod:items/ironman_repulsor"
+	},
+	"elements": [
+		{
+			"from": [5, 0, 5],
+			"to": [11, 6, 11],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 3, 8]},
+			"faces": {
+				"north": {"uv": [3, 3, 6, 6], "texture": "#0"},
+				"east": {"uv": [0, 3, 3, 6], "texture": "#0"},
+				"south": {"uv": [9, 3, 12, 6], "texture": "#0"},
+				"west": {"uv": [6, 3, 9, 6], "texture": "#0"},
+				"up": {"uv": [6, 3, 3, 0], "texture": "#0"},
+				"down": {"uv": [9, 0, 6, 3], "texture": "#0"}
+			}
+		}
+	],
+	"gui_light": "front",
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 2, 2.25],
+			"scale": [0.8, 0.8, 0.8]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 2, 2.25],
+			"scale": [0.8, 0.8, 0.8]
+		},
+		"firstperson_righthand": {
+			"translation": [1, 4.75, -1.75]
+		},
+		"firstperson_lefthand": {
+			"translation": [1, 4.75, -1.75]
+		},
+		"ground": {
+			"translation": [0, 6.5, 0]
+		},
+		"gui": {
+			"rotation": [0, -180, 0],
+			"translation": [0, 12.5, 7],
+			"scale": [2.5, 2.5, 2.5]
+		},
+		"head": {
+			"rotation": [90, 0, 0],
+			"translation": [0, 9.5, 4.75]
+		},
+		"fixed": {
+			"translation": [0, 15, 7],
+			"scale": [3, 3, 3]
+		}
+	}
+}

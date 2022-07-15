@@ -15,8 +15,11 @@ import net.minecraftforge.event.world.BiomeLoadingEvent;
 public class OreGeneration {
 
     public static void generateOres(final BiomeLoadingEvent event) {
-        if(!event.getCategory().equals(Biome.Category.NETHER) || !event.getCategory().equals(Biome.Category.THEEND)) {
-            generateOre(event.getGeneration(), OreFeatureConfig.FillerBlockType.NATURAL_STONE, BlockInit.URU_ORE.get().defaultBlockState(), 5, 0, 15, 16, 15);
+        if(!event.getCategory().equals(Biome.Category.NETHER) || !event.getCategory().equals(Biome.Category.THEEND) || !event.getCategory().equals(ModBiomes.REALITY_BIOME)) {
+            generateOre(event.getGeneration(), OreFeatureConfig.FillerBlockType.NATURAL_STONE, BlockInit.URU_ORE.get().defaultBlockState(), 10, 0, 15, 28, 45);
+        }
+        else if(!event.getCategory().equals(Biome.Category.NETHER) || !event.getCategory().equals(Biome.Category.THEEND)) {
+            generateOre(event.getGeneration(), OreFeatureConfig.FillerBlockType.NATURAL_STONE, BlockInit.URU_ORE.get().defaultBlockState(), 20, 0, 20, 64, 60);
         }
     }
 
@@ -24,5 +27,6 @@ public class OreGeneration {
         settings.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES,
                 Feature.ORE.configured(new OreFeatureConfig(fillerType, state, veinSize)).chance(chance).decorated(Placement.RANGE.configured(new TopSolidRangeConfig(minHeight, 0, maxHeight)).squared().count(amount)));
     }
+
 
 }

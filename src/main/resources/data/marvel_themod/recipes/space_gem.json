@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#R#",
+    "RmR",
+    "#R#"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:diamond"
+    },
+    "R": {
+      "item": "minecraft:ender_pearl"
+    },
+    "m": {
+      "item": "minecraft:emerald"
+    }
+  },
+  "result": {
+    "item": "marvel_themod:space_gem",
+    "count": 1
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#R#",
+    "RmR",
+    "#R#"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:netherite_scrap"
+    },
+    "R": {
+      "item": "minecraft:crafting_table"
+    },
+    "m": {
+      "item": "minecraft:emerald"
+    }
+  },
+  "result": {
+    "item": "marvel_themod:mind_gem",
+    "count": 1
+  }
+}

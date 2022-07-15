@@ -1,4 +1,4 @@
-package manueh.marvel_themod.common.containers;
+package manueh.marvel_themod.common.blocks.containers;
 
 import manueh.marvel_themod.common.items.InfinityGauntlet;
 import manueh.marvel_themod.core.init.ItemInit;

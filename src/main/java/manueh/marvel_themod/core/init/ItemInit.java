@@ -5,11 +5,9 @@ import manueh.marvel_themod.common.items.*;
 import manueh.marvel_themod.core.enums.IronManMaterial;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
-import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 
 public class ItemInit {
 
@@ -47,12 +45,12 @@ public class ItemInit {
             () -> new Item(new Item.Properties().tab(Main.GROUP)));
     //INGOT
     public static final RegistryObject<Item> REACTOR = ITEMS.register("reactor_arc",
-            () -> new Item(new Item.Properties().tab(Main.GROUP)));
+            () -> new IronManReactorArmorItem(IronManMaterial.REACTOR, EquipmentSlotType.CHEST, new Item.Properties().tab(Main.GROUP)));
     //ARMOR
-    public static final RegistryObject<Item> IRONMAN_HELMET = ITEMS.register("ironman_helmet", () -> new IronManArmor(IronManMaterial.IRONMAN_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().tab(Main.GROUP)));
-    public static final RegistryObject<Item> IRONMAN_CHESTPLATE = ITEMS.register("ironman_chestplate", () -> new IronManArmor(IronManMaterial.IRONMAN_ARMOR, EquipmentSlotType.CHEST, new Item.Properties().tab(Main.GROUP)));
-    public static final RegistryObject<Item> IRONMAN_LEGGINS = ITEMS.register("ironman_leggins", () -> new IronManArmor(IronManMaterial.IRONMAN_ARMOR, EquipmentSlotType.LEGS, new Item.Properties().tab(Main.GROUP)));
-    public static final RegistryObject<Item> IRONMAN_BOOTS = ITEMS.register("ironman_boots", () -> new IronManArmor(IronManMaterial.IRONMAN_ARMOR, EquipmentSlotType.FEET, new Item.Properties().tab(Main.GROUP)));
+    public static final RegistryObject<Item> IRONMAN_HELMET = ITEMS.register("ironman_helmet", () -> new IronManArmor(IronManMaterial.IRONMAN_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().fireResistant()));
+    public static final RegistryObject<Item> IRONMAN_CHESTPLATE = ITEMS.register("ironman_chestplate", () -> new IronManArmor(IronManMaterial.IRONMAN_ARMOR, EquipmentSlotType.CHEST, new Item.Properties().fireResistant()));
+    public static final RegistryObject<Item> IRONMAN_LEGGINS = ITEMS.register("ironman_leggins", () -> new IronManArmor(IronManMaterial.IRONMAN_ARMOR, EquipmentSlotType.LEGS, new Item.Properties().fireResistant()));
+    public static final RegistryObject<Item> IRONMAN_BOOTS = ITEMS.register("ironman_boots", () -> new IronManArmor(IronManMaterial.IRONMAN_ARMOR, EquipmentSlotType.FEET, new Item.Properties().fireResistant()));
 
 
     //CAPTAIN AMERICA
@@ -67,13 +65,13 @@ public class ItemInit {
 
     //GEMS
     public static final RegistryObject<Item> TIME_GEM = ITEMS.register("time_gem",
-            () -> new Item(new Item.Properties().tab(Main.GROUP).stacksTo(1).fireResistant()));
+            () -> new SpecialGemItem(new Item.Properties().tab(Main.GROUP).stacksTo(1).fireResistant(), 0));
     public static final RegistryObject<Item> POWER_GEM = ITEMS.register("power_gem",
             () -> new Item(new Item.Properties().tab(Main.GROUP).stacksTo(1).fireResistant()));
     public static final RegistryObject<Item> SPACE_GEM = ITEMS.register("space_gem",
             () -> new Item(new Item.Properties().tab(Main.GROUP).stacksTo(1).fireResistant()));
     public static final RegistryObject<Item> REALITY_GEM = ITEMS.register("reality_gem",
-            () -> new Item(new Item.Properties().tab(Main.GROUP).stacksTo(1).fireResistant()));
+            () -> new SpecialGemItem(new Item.Properties().tab(Main.GROUP).stacksTo(1).fireResistant(), 3));
     public static final RegistryObject<Item> SOUL_GEM = ITEMS.register("soul_gem",
             () -> new Item(new Item.Properties().tab(Main.GROUP).stacksTo(1).fireResistant()));
     public static final RegistryObject<Item> MIND_GEM = ITEMS.register("mind_gem",

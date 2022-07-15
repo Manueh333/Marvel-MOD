@@ -12,7 +12,10 @@
 	"__comment3": "flipV (default false) = mirror the texture sheet top-->bottom (if your textures appear upside-down)",
 	"__comment4": "ambientToFullbright (default true) = always render at maximum world illumination (combinedLight) regardless of the actual skylight or blocklight present",
 	"__comment5": "materialLibraryOverrideLocation (default null) = use this path/filename for the material library file .mtl",
-	"particle": "minecraft:blocks/iron_block",
+	"textures": {
+		"particles": "minecraft:blocks/iron_block"
+	},
+
 	"display": {
 		"thirdperson_righthand": {
 			"rotation": [-180, 0, 0],

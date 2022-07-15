@@ -1,7 +1,7 @@
 package manueh.marvel_themod.core.init;
 
 import manueh.marvel_themod.Main;
-import manueh.marvel_themod.common.containers.InfinityGauntletContainer;
+import manueh.marvel_themod.common.blocks.containers.InfinityGauntletContainer;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraftforge.common.extensions.IForgeContainerType;
 import net.minecraftforge.eventbus.api.IEventBus;

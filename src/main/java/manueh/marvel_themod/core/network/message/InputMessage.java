@@ -16,31 +16,30 @@ import java.util.function.Supplier;
 
 public class InputMessage {
 
-    public ItemStack stack;
 
-    public InputMessage(ItemStack stack) {
-        this.stack = stack;
+    public InputMessage() {
+
     }
 
     public static InputMessage decode(final PacketBuffer buffer) {
-        buffer.readByte();
-        return new InputMessage(buffer.readItem());
+
+        return new InputMessage();
     }
     public static void encode(final InputMessage message, final PacketBuffer buffer) {
         buffer.writeByte(0);
-        buffer.writeItemStack(message.stack, true);
+
     }
 
     public static void handle(InputMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
         NetworkEvent.Context context = contextSupplier.get();
-        context.enqueueWork( () ->
-                {
-                    ServerPlayerEntity player = context.getSender();
-                    INamedContainerProvider ncp = new InfinityGauntlet.InfinityGauntletContainerProvider((InfinityGauntlet)player.getMainHandItem().getItem(), message.stack);
-                    NetworkHooks.openGui((ServerPlayerEntity)player, ncp);
-                }
-                );
-        context.setPacketHandled(true);
+        ServerPlayerEntity player = context.getSender();
+        ItemStack gauntlet = player.getMainHandItem();
+        if(gauntlet.getItem() instanceof InfinityGauntlet) {
+            INamedContainerProvider ncp = new InfinityGauntlet.InfinityGauntletContainerProvider((InfinityGauntlet) gauntlet.getItem(), gauntlet);
+            NetworkHooks.openGui(player, ncp);
+            context.setPacketHandled(false);
+        }
+
 
     }
 

@@ -60,3 +60,10 @@ Mod that adds objects of the marvel_themod universe
     versionRange="[1.16.5,1.17)"
     ordering="NONE"
     side="BOTH"
+[[dependencies.marvel_themod]]
+modId="geckolib3"
+mandatory=true
+# This version range declares a minimum of the current minecraft version up to but not including the next major version
+versionRange="[3.0.80,)"
+ordering="NONE"
+side="CLIENT"

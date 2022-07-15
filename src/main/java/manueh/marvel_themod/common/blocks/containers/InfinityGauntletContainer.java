@@ -1,25 +1,17 @@
-package manueh.marvel_themod.common.containers;
+package manueh.marvel_themod.common.blocks.containers;
 
 import manueh.marvel_themod.common.items.InfinityGauntlet;
 import manueh.marvel_themod.core.init.ContainerInit;
-import manueh.marvel_themod.core.init.ItemInit;
-import net.minecraft.crash.CrashReport;
-import net.minecraft.crash.CrashReportCategory;
-import net.minecraft.crash.ReportedException;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.ClickType;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.registry.Registry;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
-import net.minecraftforge.items.wrapper.InvWrapper;
 
 public class InfinityGauntletContainer extends Container {
     private final InfinityGauntletItemStackHandler backpackItemStackHandler;
@@ -77,7 +69,7 @@ public class InfinityGauntletContainer extends Container {
 
     @Override
     public boolean stillValid(PlayerEntity player) {
-        return (player.getMainHandItem().equals(heldItem));
+        return (player.getMainHandItem().equals(heldItem, true));
 
     }
 }

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "RmR",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:tnt"
+    },
+    "R": {
+      "item": "minecraft:diamond"
+    },
+    "m": {
+      "item": "minecraft:emerald"
+    }
+  },
+  "result": {
+    "item": "marvel_themod:power_gem",
+    "count": 1
+  }
+}

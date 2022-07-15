@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "RmR",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:diamond"
+    },
+    "R": {
+      "item": "minecraft:name_tag"
+    },
+    "m": {
+      "item": "minecraft:emerald"
+    }
+  },
+  "result": {
+    "item": "marvel_themod:soul_gem",
+    "count": 1
+  }
+}
