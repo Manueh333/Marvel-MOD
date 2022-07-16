@@ -11,7 +11,7 @@
   "block.marvel_themod.corrupted_block": "§cBloque Corrupto",
   "tooltip.marvel_themod.hold_shift": "§7Presiona §eShift §7para más información!",
   "tooltip.marvel_themod.mjolnir": "§7Este es el martillo del dios §bThor§7. Si haces §9Click derecho §7se disparará y caerá un §6rayo §7donde caiga.",
-  "tooltip.marvel_themod.ironman_armor": "§7Esta es la armadura de §4Iron-Man§7. Cuando la lleves §9equipada §7podrás §6volar§7 pulsando %1$s§7.",
+  "tooltip.marvel_themod.ironman_armor": "§7Esta es la armadura de §4Iron-Man§7. Cuando la lleves §9equipada §7podrás §6volar§7 pulsando %1$s§7. Y puedes disparar un rayo pulsando §9%2$s§7.",
   "tooltip.marvel_themod.captain_america_shield": "§7Este es el §9Escudo del §1Capitán §cAmérica.",
   "item.marvel_themod.nanobot": "§dNanobot",
   "item.marvel_themod.reactor_arc": "§bReactor ARC",

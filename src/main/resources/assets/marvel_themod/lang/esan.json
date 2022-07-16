@@ -11,7 +11,7 @@
   "block.marvel_themod.corrupted_block": "§cBloque Corrûtto",
   "tooltip.marvel_themod.hold_shift": "§7Preçiona §eÇîtt §7pa mâh informaçión!",
   "tooltip.marvel_themod.mjolnir": "§7Êtte êh er martiyo der diôh §bTor§7. Çi açê §9Click derexo §7çe dîpparará y caerá un §6rayo §7donde caiga.",
-  "tooltip.marvel_themod.ironman_armor": "§7Êtta êh la armadura de §4Iron-Man§7. Cuando la yebê §9equipá §7podrâh §6bolar§7 purçando  %1$s§7.",
+  "tooltip.marvel_themod.ironman_armor": "§7Êtta êh la armadura de §4Iron-Man§7. Cuando la yebê §9equipá §7podrâh §6bolar§7 purçando  %1$s§7. Y puedê dîpparâh un rayo purçando §9%2$s§7.",
   "tooltip.marvel_themod.captain_america_shield": "§7Êtte êh el §9Êccudo del §1Capitán §cAmérica.",
   "item.marvel_themod.nanobot": "§dNanobôh",
   "item.marvel_themod.reactor_arc": "§bReâttôh ARC",

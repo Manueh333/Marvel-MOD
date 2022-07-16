@@ -61,6 +61,7 @@ public class IronManArmor extends GeoArmorItem implements IAnimatable  {
 
         if(sneakPressed) {
             tooltip.add(new TranslationTextComponent("tooltip.marvel_themod.ironman_armor",  ClientEvents.keyFly.getKey().getDisplayName(), ClientEvents.shootIronManBeam.getKey().getDisplayName()));
+            tooltip.add(new TranslationTextComponent("tooltip.marvel_themod.ironman_repulsor", ClientEvents.shootIronManBeam.getKey().getDisplayName()));
         }else {
             tooltip.add(new TranslationTextComponent("tooltip.marvel_themod.hold_shift"));
         }
