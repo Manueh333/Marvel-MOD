@@ -13,8 +13,7 @@ import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 public class ClientUtils {
     public static void clientSetup2(final FMLClientSetupEvent event) {
 
-        GeoArmorRenderer.registerArmorRenderer(IronManReactorArmorItem.class, new IronManReactorRenderer());
-        GeoArmorRenderer.registerArmorRenderer(IronManArmor.class, new IronManArmorRenderer());
+
 
     }
 }

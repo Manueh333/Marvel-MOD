@@ -3,11 +3,15 @@ package manueh.marvel_themod.core.init;
 import manueh.marvel_themod.Main;
 import manueh.marvel_themod.common.items.*;
 import manueh.marvel_themod.core.enums.IronManMaterial;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.*;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.world.entity.EquipmentSlot;
+
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Tiers;
 
 public class ItemInit {
 
@@ -36,7 +40,7 @@ public class ItemInit {
             () -> new Item(new Item.Properties().tab(Main.GROUP)));
     //MJOLNIR
     public static final RegistryObject<Item> MJOLNIR = ITEMS.register("mjolnir",
-            () -> new mjolnir(ItemTier.DIAMOND,8,-1.5f, new Item.Properties().tab(Main.GROUP).durability(800).setNoRepair().fireResistant()));
+            () -> new mjolnir(Tiers.DIAMOND,8,-1.5f, new Item.Properties().tab(Main.GROUP).durability(800).setNoRepair().fireResistant()));
 
 
     //IRON_MAN
@@ -45,16 +49,16 @@ public class ItemInit {
             () -> new Item(new Item.Properties().tab(Main.GROUP)));
     //INGOT
     public static final RegistryObject<Item> REACTOR = ITEMS.register("reactor_arc",
-            () -> new IronManReactorArmorItem(IronManMaterial.REACTOR, EquipmentSlotType.CHEST, new Item.Properties().tab(Main.GROUP)));
+            () -> new IronManReactorArmorItem(IronManMaterial.REACTOR, EquipmentSlot.CHEST, new Item.Properties().tab(Main.GROUP)));
     //ARMOR
-    public static final RegistryObject<Item> IRONMAN_HELMET = ITEMS.register("ironman_helmet", () -> new IronManArmor(IronManMaterial.IRONMAN_ARMOR, EquipmentSlotType.HEAD, new Item.Properties().fireResistant()));
-    public static final RegistryObject<Item> IRONMAN_CHESTPLATE = ITEMS.register("ironman_chestplate", () -> new IronManArmor(IronManMaterial.IRONMAN_ARMOR, EquipmentSlotType.CHEST, new Item.Properties().fireResistant()));
-    public static final RegistryObject<Item> IRONMAN_LEGGINS = ITEMS.register("ironman_leggins", () -> new IronManArmor(IronManMaterial.IRONMAN_ARMOR, EquipmentSlotType.LEGS, new Item.Properties().fireResistant()));
-    public static final RegistryObject<Item> IRONMAN_BOOTS = ITEMS.register("ironman_boots", () -> new IronManArmor(IronManMaterial.IRONMAN_ARMOR, EquipmentSlotType.FEET, new Item.Properties().fireResistant()));
+    public static final RegistryObject<Item> IRONMAN_HELMET = ITEMS.register("ironman_helmet", () -> new IronManArmor(IronManMaterial.IRONMAN_ARMOR, EquipmentSlot.HEAD, new Item.Properties().fireResistant()));
+    public static final RegistryObject<Item> IRONMAN_CHESTPLATE = ITEMS.register("ironman_chestplate", () -> new IronManArmor(IronManMaterial.IRONMAN_ARMOR, EquipmentSlot.CHEST, new Item.Properties().fireResistant()));
+    public static final RegistryObject<Item> IRONMAN_LEGGINS = ITEMS.register("ironman_leggins", () -> new IronManArmor(IronManMaterial.IRONMAN_ARMOR, EquipmentSlot.LEGS, new Item.Properties().fireResistant()));
+    public static final RegistryObject<Item> IRONMAN_BOOTS = ITEMS.register("ironman_boots", () -> new IronManArmor(IronManMaterial.IRONMAN_ARMOR, EquipmentSlot.FEET, new Item.Properties().fireResistant()));
 
 
     //CAPTAIN AMERICA
-    public static final RegistryObject<Item> CAPTAIN_AMERICA_SHIELD = ITEMS.register("captain_america_shield", () -> new CaptainAmericaShield(ItemTier.DIAMOND,8,-1.5f, new Item.Properties().tab(Main.GROUP).durability(800).setNoRepair().fireResistant()));
+    public static final RegistryObject<Item> CAPTAIN_AMERICA_SHIELD = ITEMS.register("captain_america_shield", () -> new CaptainAmericaShield(Tiers.DIAMOND,8,-1.5f, new Item.Properties().tab(Main.GROUP).durability(800).setNoRepair().fireResistant()));
 
     //INFINITY GAUNTLET
     public static final RegistryObject<InfinityGauntlet> INFINITY_GAUNTLET = ITEMS.register("infinity_gauntlet", () -> new InfinityGauntlet(new Item.Properties().stacksTo(1).tab(Main.GROUP).fireResistant()));

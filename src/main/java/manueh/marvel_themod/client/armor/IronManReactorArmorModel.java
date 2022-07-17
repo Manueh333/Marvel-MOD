@@ -2,7 +2,7 @@ package manueh.marvel_themod.client.armor;
 
 import manueh.marvel_themod.Main;
 import manueh.marvel_themod.common.items.IronManReactorArmorItem;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class IronManReactorArmorModel extends AnimatedGeoModel<IronManReactorArmorItem> {

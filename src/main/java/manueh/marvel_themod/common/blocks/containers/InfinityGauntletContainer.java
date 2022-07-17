@@ -2,23 +2,23 @@ package manueh.marvel_themod.common.blocks.containers;
 
 import manueh.marvel_themod.common.items.InfinityGauntlet;
 import manueh.marvel_themod.core.init.ContainerInit;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class InfinityGauntletContainer extends Container {
+public class InfinityGauntletContainer extends AbstractContainerMenu {
     private final InfinityGauntletItemStackHandler backpackItemStackHandler;
 
     private final ItemStack heldItem;
 
-    public InfinityGauntletContainer(int windowId, PlayerInventory playerInv, PacketBuffer data) {
+    public InfinityGauntletContainer(int windowId, Inventory playerInv, FriendlyByteBuf data) {
         this(windowId, playerInv, new InfinityGauntletItemStackHandler(), ItemStack.EMPTY);
     }
 
@@ -28,8 +28,8 @@ public class InfinityGauntletContainer extends Container {
         return true;
     }
 
-    public InfinityGauntletContainer(int windowId, PlayerInventory playerInv, InfinityGauntletItemStackHandler backpackItemStackHandler, ItemStack stack) {
-        super((ContainerType) ContainerInit.INFINITY_GAUNTLET_CONTAINER.get(), windowId);
+    public InfinityGauntletContainer(int windowId, Inventory playerInv, InfinityGauntletItemStackHandler backpackItemStackHandler, ItemStack stack) {
+        super((MenuType) ContainerInit.INFINITY_GAUNTLET_CONTAINER.get(), windowId);
         this.backpackItemStackHandler = backpackItemStackHandler;
         this.heldItem = stack;
 
@@ -38,14 +38,14 @@ public class InfinityGauntletContainer extends Container {
         int row;
         for (row = 0; row < 3; ) {
             for (int i = 0; i < 9; i++)
-                addSlot(new Slot((IInventory) playerInv, 9 + row * 9 + i, 8 + i * 18, 84 + row * 18));
+                addSlot(new Slot((Container) playerInv, 9 + row * 9 + i, 8 + i * 18, 84 + row * 18));
             row++;
         }
         for (int column = 0; column < 9; column++)
-            addSlot(new Slot((IInventory) playerInv, column, 8 + column * 18, 142));
+            addSlot(new Slot((Container) playerInv, column, 8 + column * 18, 142));
     }
 
-    public ItemStack quickMoveStack(PlayerEntity player, int index) {
+    public ItemStack quickMoveStack(Player player, int index) {
         ItemStack stack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         if (slot == null || !slot.hasItem())
@@ -68,7 +68,7 @@ public class InfinityGauntletContainer extends Container {
 
 
     @Override
-    public boolean stillValid(PlayerEntity player) {
+    public boolean stillValid(Player player) {
         return (player.getMainHandItem().equals(heldItem, true));
 
     }

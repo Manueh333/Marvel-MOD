@@ -1,50 +1,63 @@
 package manueh.marvel_themod.client;
 
 import manueh.marvel_themod.Main;
+import manueh.marvel_themod.client.armor.IronManArmorRenderer;
+import manueh.marvel_themod.client.armor.IronManReactorRenderer;
+import manueh.marvel_themod.common.items.IronManArmor;
+import manueh.marvel_themod.common.items.IronManReactorArmorItem;
 import manueh.marvel_themod.core.init.ItemInit;
 import manueh.marvel_themod.core.init.ParticlesInit;
 import manueh.marvel_themod.core.network.message.InputMessage;
 import manueh.marvel_themod.core.network.message.PacketChangeArmorEntity;
 import manueh.marvel_themod.core.network.message.PacketDamageEntity;
-import net.minecraft.client.GameSettings;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.*;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.*;
-import net.minecraft.util.math.*;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.client.Options;
+import net.minecraft.core.particles.ParticleTypes;
+
+import net.minecraft.util.Mth;
+
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.*;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
-
+import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 
 import java.util.Optional;
 
 @Mod.EventBusSubscriber(modid = Main.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientEvents {
 
-    public static final KeyBinding shootIronManBeam = new KeyBinding("key.marvel_themod.shootIronManBeam", GLFW.GLFW_KEY_C, "key.categories.marvel_themod");
-    public static final KeyBinding equipIronManArmor = new KeyBinding("key.marvel_themod.equipIronManArmor", GLFW.GLFW_KEY_Z, "key.categories.marvel_themod");
+    public static final KeyMapping shootIronManBeam = new KeyMapping("key.marvel_themod.shootIronManBeam", GLFW.GLFW_KEY_C, "key.categories.marvel_themod");
+    public static final KeyMapping equipIronManArmor = new KeyMapping("key.marvel_themod.equipIronManArmor", GLFW.GLFW_KEY_Z, "key.categories.marvel_themod");
 
-    public static final KeyBinding keyFly = new KeyBinding("key.marvel_themod.fly", GLFW.GLFW_KEY_LEFT_ALT, "key.categories.marvel_themod");
-    public static final KeyBinding keyOpenGauntlet = new KeyBinding("key.marvel_themod.openInfinityGauntlet", GLFW.GLFW_KEY_B, "key.categories.marvel_themod");
+    public static final KeyMapping keyFly = new KeyMapping("key.marvel_themod.fly", GLFW.GLFW_KEY_LEFT_ALT, "key.categories.marvel_themod");
+    public static final KeyMapping keyOpenGauntlet = new KeyMapping("key.marvel_themod.openInfinityGauntlet", GLFW.GLFW_KEY_B, "key.categories.marvel_themod");
 
 
     private static boolean flying = false;
 
 
+
+
     @SubscribeEvent
     public static void gauntletGUI(final TickEvent.ClientTickEvent event) {
-        PlayerEntity player = Minecraft.getInstance().player;
+        Player player = Minecraft.getInstance().player;
         if(player != null)  {
             ItemStack stack = player.getMainHandItem();
 
@@ -59,9 +72,9 @@ public class ClientEvents {
     public static void particles(final TickEvent.ClientTickEvent event) {
         Main.timer++;
 
-        PlayerEntity p = Minecraft.getInstance().player;
+        Player p = Minecraft.getInstance().player;
         if(p != null) {
-            World level =  p.getCommandSenderWorld();
+            Level level =  p.getCommandSenderWorld();
             if(Main.makeTeleportAnimation && Main.timer > 1) {
                 for (double x = -1; x < 1; x += 0.33) {
                     p.getCommandSenderWorld().addParticle(ParticlesInit.SPACE_GEM_PARTICLE.get(), p.position().x + x, p.position().y, p.position().z, 0, -0.3, 0);
@@ -90,16 +103,16 @@ public class ClientEvents {
     public static boolean changingArmor = false;
     @SubscribeEvent
     public static void ironManTickEvent(final TickEvent.PlayerTickEvent event) {
-        PlayerEntity player = event.player;
+        Player player = event.player;
 
         if(player != null) {
-            GameSettings settings = Minecraft.getInstance().options;
-            KeyBinding jump = settings.keyJump;
-            KeyBinding crouch = settings.keyShift;
-            KeyBinding fly = ClientEvents.keyFly;
-            KeyBinding shoot = ClientEvents.shootIronManBeam;
-            KeyBinding equip = ClientEvents.equipIronManArmor;
-            World level = player.level;
+            Options settings = Minecraft.getInstance().options;
+            KeyMapping jump = settings.keyJump;
+            KeyMapping crouch = settings.keyShift;
+            KeyMapping fly = ClientEvents.keyFly;
+            KeyMapping shoot = ClientEvents.shootIronManBeam;
+            KeyMapping equip = ClientEvents.equipIronManArmor;
+            Level level = player.level;
 
             if(fullIronManArmor(player)) {
                 if(flying) {
@@ -135,18 +148,18 @@ public class ClientEvents {
                 if(shoot.isDown()) {
 
                     Double rayLength = new Double(100);
-                    Vector3d playerRotation = player.getViewVector(0);
-                    Vector3d rayPath = playerRotation.scale(rayLength);
+                    Vec3 playerRotation = player.getViewVector(0);
+                    Vec3 rayPath = playerRotation.scale(rayLength);
 
                     //RAY START AND END POINTS
-                    Vector3d from = player.getEyePosition(0);
-                    Vector3d to = from.add(rayPath);
+                    Vec3 from = player.getEyePosition(0);
+                    Vec3 to = from.add(rayPath);
                     Entity entity = null;
 
-                    EntityRayTraceResult entityRayTraceResult = getPlayerPOVHitResult(player);
+                    EntityHitResult entityRayTraceResult = getPlayerPOVHitResult(player);
 
                     if (entityRayTraceResult != null) {
-                        if (entityRayTraceResult.getType() == RayTraceResult.Type.ENTITY) {
+                        if (entityRayTraceResult.getType() == HitResult.Type.ENTITY) {
                             entity = entityRayTraceResult.getEntity();
                      }
                         if (!level.isClientSide && entity != null) {
@@ -155,7 +168,7 @@ public class ClientEvents {
                     }
                     if (level.isClientSide) {
 
-                        Vector3d playerAngle = player.getLookAngle();
+                        Vec3 playerAngle = player.getLookAngle();
                         for (double i = 0; i < 100; i += 0.33) {
                             level.addParticle(ParticlesInit.IRONMAN_BEAM_PARTICLE.get(), player.getEyePosition(0).x + (playerAngle.x * i), player.getEyePosition(0).y + (playerAngle.y * i), player.getEyePosition(0).z + (playerAngle.z * i), 0, 0, 0);
 
@@ -163,7 +176,7 @@ public class ClientEvents {
                     }
                 }
 
-           }else if( !changingArmor && equipIronManArmor.consumeClick() && player.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ItemInit.REACTOR.get())
+           }else if( !changingArmor && equipIronManArmor.consumeClick() && player.getItemBySlot(EquipmentSlot.CHEST).getItem() == ItemInit.REACTOR.get())
            {
                Main.NETWORK.sendToServer(new PacketChangeArmorEntity(player.getId()));
                changingArmor = true;
@@ -174,28 +187,28 @@ public class ClientEvents {
     }
 
 
-    private static boolean fullIronManArmor(PlayerEntity player) {
-        return player.getItemBySlot(EquipmentSlotType.FEET).getItem() == (ItemInit.IRONMAN_BOOTS.get()) && player.getItemBySlot(EquipmentSlotType.LEGS).getItem() == ItemInit.IRONMAN_LEGGINS.get() && player.getItemBySlot(EquipmentSlotType.CHEST).getItem() == ItemInit.IRONMAN_CHESTPLATE.get() && player.getItemBySlot(EquipmentSlotType.HEAD).getItem() == ItemInit.IRONMAN_HELMET.get();
+    private static boolean fullIronManArmor(Player player) {
+        return player.getItemBySlot(EquipmentSlot.FEET).getItem() == (ItemInit.IRONMAN_BOOTS.get()) && player.getItemBySlot(EquipmentSlot.LEGS).getItem() == ItemInit.IRONMAN_LEGGINS.get() && player.getItemBySlot(EquipmentSlot.CHEST).getItem() == ItemInit.IRONMAN_CHESTPLATE.get() && player.getItemBySlot(EquipmentSlot.HEAD).getItem() == ItemInit.IRONMAN_HELMET.get();
 
     }
 
-    public static EntityRayTraceResult getPlayerPOVHitResult(PlayerEntity player) {
+    public static EntityHitResult getPlayerPOVHitResult(Player player) {
         float playerRotX = player.getViewXRot(0);
         float playerRotY = player.getViewYRot(0);
-        Vector3d startPos = player.getEyePosition(0);
-        float f2 = MathHelper.cos(-playerRotY * ((float) Math.PI / 180F) - (float) Math.PI);
-        float f3 = MathHelper.sin(-playerRotY * ((float) Math.PI / 180F) - (float) Math.PI);
-        float f4 = -MathHelper.cos(-playerRotX * ((float) Math.PI / 180F));
-        float additionY = MathHelper.sin(-playerRotX * ((float) Math.PI / 180F));
+        Vec3 startPos = player.getEyePosition(0);
+        float f2 = Mth.cos(-playerRotY * ((float) Math.PI / 180F) - (float) Math.PI);
+        float f3 = Mth.sin(-playerRotY * ((float) Math.PI / 180F) - (float) Math.PI);
+        float f4 = -Mth.cos(-playerRotX * ((float) Math.PI / 180F));
+        float additionY = Mth.sin(-playerRotX * ((float) Math.PI / 180F));
         float additionX = f3 * f4;
         float additionZ = f2 * f4;
         double d0 = 1000;
-        Vector3d endVec = startPos.add((double) additionX * d0, (double) additionY * d0, (double) additionZ * d0);
-        AxisAlignedBB startEndBox = new AxisAlignedBB(startPos, endVec);
+        Vec3 endVec = startPos.add((double) additionX * d0, (double) additionY * d0, (double) additionZ * d0);
+        AABB startEndBox = new AABB(startPos, endVec);
         Entity entity = null;
         for (Entity entity1 : player.level.getEntities(player, startEndBox, (val) -> true)) {
-            AxisAlignedBB aabb = entity1.getBoundingBox().inflate(entity1.getPickRadius());
-            Optional<Vector3d> optional = aabb.clip(startPos, endVec);
+            AABB aabb = entity1.getBoundingBox().inflate(entity1.getPickRadius());
+            Optional<Vec3> optional = aabb.clip(startPos, endVec);
             if (aabb.contains(startPos)) {
                 if (d0 >= 0.0D) {
                     entity = entity1;
@@ -203,7 +216,7 @@ public class ClientEvents {
                     d0 = 0.0D;
                 }
             } else if (optional.isPresent()) {
-                Vector3d vec31 = optional.get();
+                Vec3 vec31 = optional.get();
                 double d1 = startPos.distanceToSqr(vec31);
                 if (d1 < d0 || d0 == 0.0D) {
                     if (entity1.getRootVehicle() == player.getRootVehicle() && !entity1.canRiderInteract()) {
@@ -220,23 +233,23 @@ public class ClientEvents {
             }
         }
 
-        return (entity == null) ? null : new EntityRayTraceResult(entity);
+        return (entity == null) ? null : new EntityHitResult(entity);
     }
     @OnlyIn(Dist.CLIENT)
-    public static void changeWalkSpeed(PlayerEntity player, float speed) {
-        player.abilities.setWalkingSpeed(speed);
+    public static void changeWalkSpeed(Player player, float speed) {
+        player.getAbilities().setWalkingSpeed(speed);
     }
 
-    public static void changeFlySpeed(PlayerEntity player, float speed) {
-        player.abilities.setFlyingSpeed(speed);
+    public static void changeFlySpeed(Player player, float speed) {
+        player.getAbilities().setFlyingSpeed(speed);
     }
 
     @SubscribeEvent
     public static void MjolnirOnHand(final TickEvent.PlayerTickEvent event) {
 
-        PlayerEntity player = event.player;
+        Player player = event.player;
         if(player != null) {
-            if(player.getItemInHand(Hand.MAIN_HAND).sameItemStackIgnoreDurability(ItemInit.MJOLNIR.get().getDefaultInstance())) {
+            if(player.getItemInHand(InteractionHand.MAIN_HAND).sameItemStackIgnoreDurability(ItemInit.MJOLNIR.get().getDefaultInstance())) {
                 player.fallDistance = 0;
                // player.abilities.setWalkingSpeed(0.06f);
 
@@ -266,10 +279,10 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void mjolnirFly(TickEvent.ClientTickEvent event) {
-        GameSettings settings = Minecraft.getInstance().options;
-        KeyBinding jump = settings.keyJump;
+        Options settings = Minecraft.getInstance().options;
+        KeyMapping jump = settings.keyJump;
         if(jump.isDown()) {
-            if(Minecraft.getInstance().player.getItemInHand(Hand.MAIN_HAND).sameItemStackIgnoreDurability(ItemInit.MJOLNIR.get().getDefaultInstance())) {
+            if(Minecraft.getInstance().player.getItemInHand(InteractionHand.MAIN_HAND).sameItemStackIgnoreDurability(ItemInit.MJOLNIR.get().getDefaultInstance())) {
 
                 Minecraft.getInstance().player.setDeltaMovement(Minecraft.getInstance().player.getDeltaMovement().x ,0.6, Minecraft.getInstance().player.getDeltaMovement().z);
 
@@ -282,19 +295,19 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void fallDamage(LivingDamageEvent event) {
-        PlayerEntity player = null;
+        Player player = null;
         if (event.getEntity().is(Minecraft.getInstance().player)) {
-            player = (PlayerEntity) event.getEntity();
+            player = (Player) event.getEntity();
         }
         if(player != null) {
-            if(player.getItemBySlot(EquipmentSlotType.HEAD).getStack().sameItemStackIgnoreDurability(ItemInit.IRONMAN_HELMET.get().getDefaultInstance()) && player.getItemBySlot(EquipmentSlotType.CHEST).getStack().sameItemStackIgnoreDurability(ItemInit.IRONMAN_CHESTPLATE.get().getDefaultInstance()) && player.getItemBySlot(EquipmentSlotType.LEGS).getStack().sameItemStackIgnoreDurability(ItemInit.IRONMAN_LEGGINS.get().getDefaultInstance()) && player.getItemBySlot(EquipmentSlotType.FEET).getStack().sameItemStackIgnoreDurability(ItemInit.IRONMAN_BOOTS.get().getDefaultInstance())) {
+            if(player.getItemBySlot(EquipmentSlot.HEAD).sameItemStackIgnoreDurability(ItemInit.IRONMAN_HELMET.get().getDefaultInstance()) && player.getItemBySlot(EquipmentSlot.CHEST).sameItemStackIgnoreDurability(ItemInit.IRONMAN_CHESTPLATE.get().getDefaultInstance()) && player.getItemBySlot(EquipmentSlot.LEGS).sameItemStackIgnoreDurability(ItemInit.IRONMAN_LEGGINS.get().getDefaultInstance()) && player.getItemBySlot(EquipmentSlot.FEET).sameItemStackIgnoreDurability(ItemInit.IRONMAN_BOOTS.get().getDefaultInstance())) {
                 if(event.getSource().equals(DamageSource.FALL)) {
                         event.setCanceled(true);
                         player.fallDistance = 0;
                 }
             }
 
-            if(player.getItemInHand(Hand.MAIN_HAND).sameItemStackIgnoreDurability(ItemInit.MJOLNIR.get().getDefaultInstance())) {
+            if(player.getItemInHand(InteractionHand.MAIN_HAND).sameItemStackIgnoreDurability(ItemInit.MJOLNIR.get().getDefaultInstance())) {
                 if(event.getSource().equals(DamageSource.FALL)) {
                     event.setCanceled(true);
                     player.fallDistance = 0;
@@ -307,13 +320,13 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void mjolnirLightningProtection(LivingDamageEvent event) {
-        PlayerEntity player = null;
+        Player player = null;
         if(event.getEntity().is(Minecraft.getInstance().player)) {
-            player = (PlayerEntity) event.getEntity();
+            player = (Player) event.getEntity();
         }
         if(player != null) {
-            if(player.getItemInHand(Hand.MAIN_HAND).sameItemStackIgnoreDurability(ItemInit.MJOLNIR.get().getDefaultInstance())) {
-                if(event.getEntity() instanceof PlayerEntity) {
+            if(player.getItemInHand(InteractionHand.MAIN_HAND).sameItemStackIgnoreDurability(ItemInit.MJOLNIR.get().getDefaultInstance())) {
+                if(event.getEntity() instanceof Player) {
                     if(event.getSource().equals(DamageSource.LIGHTNING_BOLT) || event.getSource().equals(DamageSource.ON_FIRE) || event.getSource().equals(DamageSource.IN_FIRE)) {
                         event.getEntity().clearFire();
                         event.setCanceled(true);

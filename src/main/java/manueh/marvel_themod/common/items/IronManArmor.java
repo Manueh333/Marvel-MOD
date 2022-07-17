@@ -1,27 +1,15 @@
 package manueh.marvel_themod.common.items;
 
-import com.google.common.collect.ImmutableMap;
-import manueh.marvel_themod.Main;
 import manueh.marvel_themod.client.ClientEvents;
-import manueh.marvel_themod.core.enums.IronManMaterial;
-import manueh.marvel_themod.core.init.ItemInit;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ArmorMaterial;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -34,14 +22,12 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.item.GeoArmorItem;
 
 import javax.annotation.Nullable;
-import java.time.chrono.MinguoEra;
 import java.util.List;
-import java.util.Map;
 
 public class IronManArmor extends GeoArmorItem implements IAnimatable  {
     private AnimationFactory factory = new AnimationFactory(this);
 
-    public IronManArmor(IArmorMaterial material, EquipmentSlotType slotType, Properties properties) {
+    public IronManArmor(ArmorMaterial material, EquipmentSlot slotType, Properties properties) {
         super(material, slotType, properties);
     }
 
@@ -50,7 +36,7 @@ public class IronManArmor extends GeoArmorItem implements IAnimatable  {
     public boolean flying = false;
   @OnlyIn(Dist.CLIENT)
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag flagIn) {
         super.appendHoverText(stack, world, tooltip, flagIn);
         Minecraft mc = Minecraft.getInstance();
 
@@ -60,10 +46,10 @@ public class IronManArmor extends GeoArmorItem implements IAnimatable  {
         boolean sneakPressed = Screen.hasShiftDown();
 
         if(sneakPressed) {
-            tooltip.add(new TranslationTextComponent("tooltip.marvel_themod.ironman_armor",  ClientEvents.keyFly.getKey().getDisplayName(), ClientEvents.shootIronManBeam.getKey().getDisplayName()));
-            tooltip.add(new TranslationTextComponent("tooltip.marvel_themod.ironman_repulsor", ClientEvents.shootIronManBeam.getKey().getDisplayName()));
+            tooltip.add(new TranslatableComponent("tooltip.marvel_themod.ironman_armor",  ClientEvents.keyFly.getKey().getDisplayName(), ClientEvents.shootIronManBeam.getKey().getDisplayName()));
+            tooltip.add(new TranslatableComponent("tooltip.marvel_themod.ironman_repulsor"));
         }else {
-            tooltip.add(new TranslationTextComponent("tooltip.marvel_themod.hold_shift"));
+            tooltip.add(new TranslatableComponent("tooltip.marvel_themod.hold_shift"));
         }
 
     }

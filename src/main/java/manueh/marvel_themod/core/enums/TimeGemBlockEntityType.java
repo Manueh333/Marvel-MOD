@@ -2,14 +2,14 @@ package manueh.marvel_themod.core.enums;
 
 import com.mojang.datafixers.types.Type;
 import manueh.marvel_themod.common.entity.TimeGemBlockEntity;
-import net.minecraft.block.Block;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import java.util.function.Supplier;
 
 @Deprecated
-public class TimeGemBlockEntityType extends TileEntityType<TimeGemBlockEntity> {
-  public TimeGemBlockEntityType(Supplier<TimeGemBlockEntity> supplier, Type type) {
+public class TimeGemBlockEntityType extends BlockEntityType<TimeGemBlockEntity> {
+  public TimeGemBlockEntityType(BlockEntitySupplier<TimeGemBlockEntity> supplier, Type type) {
     super(supplier, null, type);
   }
   

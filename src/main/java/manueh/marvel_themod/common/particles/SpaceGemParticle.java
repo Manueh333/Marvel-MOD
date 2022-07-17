@@ -1,18 +1,16 @@
 package manueh.marvel_themod.common.particles;
 
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.renderer.texture.SpriteMap;
-import net.minecraft.client.world.ClientWorld;
-
-import net.minecraft.particles.BasicParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 
 
-public class SpaceGemParticle extends SpriteTexturedParticle {
-   protected SpaceGemParticle(ClientWorld level, double xCoord, double yCoord, double zCoord,
-                               IAnimatedSprite spriteSet, double xd, double yd, double zd) {
+public class SpaceGemParticle extends TextureSheetParticle {
+   protected SpaceGemParticle(ClientLevel level, double xCoord, double yCoord, double zCoord,
+                               SpriteSet spriteSet, double xd, double yd, double zd) {
       super(level, xCoord, yCoord, zCoord, xd, yd, zd);
 
       this.roll = 0.8F;
@@ -39,19 +37,19 @@ public class SpaceGemParticle extends SpriteTexturedParticle {
    }
 
    @Override
-   public IParticleRenderType getRenderType() {
-      return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+   public ParticleRenderType getRenderType() {
+      return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
    }
 
    @OnlyIn(Dist.CLIENT)
-   public static class Factory implements IParticleFactory<BasicParticleType> {
-      private final IAnimatedSprite sprites;
+   public static class Factory implements ParticleProvider<SimpleParticleType> {
+      private final SpriteSet sprites;
 
-      public Factory(IAnimatedSprite spriteSet) {
+      public Factory(SpriteSet spriteSet) {
          this.sprites = spriteSet;
       }
 
-      public Particle createParticle(BasicParticleType particleType, ClientWorld level,
+      public Particle createParticle(SimpleParticleType particleType, ClientLevel level,
                                      double x, double y, double z,
                                      double dx, double dy, double dz) {
          Particle particle = new SpaceGemParticle(level, x, y, z, this.sprites, dx, dy, dz);

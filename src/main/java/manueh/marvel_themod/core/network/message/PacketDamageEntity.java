@@ -1,13 +1,11 @@
 package manueh.marvel_themod.core.network.message;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.DamageSource;
-
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
+
 
 public class PacketDamageEntity
 {
@@ -27,13 +25,13 @@ public class PacketDamageEntity
 	}
 	
 
-	public static PacketDamageEntity decode(final PacketBuffer buffer) {
+	public static PacketDamageEntity decode(final FriendlyByteBuf buffer) {
 
 		ID = buffer.readInt();
 		damage = buffer.readFloat();
 		return new PacketDamageEntity(ID, damage);
 	}
-	public static void encode(final PacketDamageEntity message, final PacketBuffer buffer) {
+	public static void encode(final PacketDamageEntity message, final FriendlyByteBuf buffer) {
 		buffer.writeInt(message.ID);
 		buffer.writeFloat(message.damage);
 

@@ -4,23 +4,22 @@ import manueh.marvel_themod.Main;
 import manueh.marvel_themod.common.items.IronManArmor;
 import manueh.marvel_themod.core.init.DimensionInit;
 import manueh.marvel_themod.core.init.ItemInit;
-import net.minecraft.block.*;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.world.Dimension;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -41,7 +40,7 @@ public class EventHandler {
 
         }
         Entity player = event.getEntity();
-        if(player.level.dimension().equals(Dimension.NETHER)) {
+        if(player.level.dimension().equals(LevelStem.NETHER)) {
             int count = drops.getItem().getCount();
             if(drops.getItem().getItem().equals(Items.EMERALD)) {
                 ItemStack dropStack = ItemInit.REALITY_GEM.get().getDefaultInstance();
@@ -54,19 +53,19 @@ public class EventHandler {
 
     @SubscribeEvent
     public static void fallDamage(LivingDamageEvent event) {
-        PlayerEntity player = null;
-        if (event.getEntity() instanceof PlayerEntity) {
-            player = (PlayerEntity) event.getEntity();
+        Player player = null;
+        if (event.getEntity() instanceof Player) {
+            player = (Player) event.getEntity();
         }
         if(player != null) {
-            if(player.getItemBySlot(EquipmentSlotType.HEAD).getStack().sameItemStackIgnoreDurability(ItemInit.IRONMAN_HELMET.get().getDefaultInstance()) && player.getItemBySlot(EquipmentSlotType.CHEST).getStack().sameItemStackIgnoreDurability(ItemInit.IRONMAN_CHESTPLATE.get().getDefaultInstance()) && player.getItemBySlot(EquipmentSlotType.LEGS).getStack().sameItemStackIgnoreDurability(ItemInit.IRONMAN_LEGGINS.get().getDefaultInstance()) && player.getItemBySlot(EquipmentSlotType.FEET).getStack().sameItemStackIgnoreDurability(ItemInit.IRONMAN_BOOTS.get().getDefaultInstance())) {
+            if(player.getItemBySlot(EquipmentSlot.HEAD).sameItemStackIgnoreDurability(ItemInit.IRONMAN_HELMET.get().getDefaultInstance()) && player.getItemBySlot(EquipmentSlot.CHEST).sameItemStackIgnoreDurability(ItemInit.IRONMAN_CHESTPLATE.get().getDefaultInstance()) && player.getItemBySlot(EquipmentSlot.LEGS).sameItemStackIgnoreDurability(ItemInit.IRONMAN_LEGGINS.get().getDefaultInstance()) && player.getItemBySlot(EquipmentSlot.FEET).sameItemStackIgnoreDurability(ItemInit.IRONMAN_BOOTS.get().getDefaultInstance())) {
                 if(event.getSource().equals(DamageSource.FALL)) {
                     event.setCanceled(true);
                     player.fallDistance = 0;
                 }
             }
 
-            if(player.getItemInHand(Hand.MAIN_HAND).sameItemStackIgnoreDurability(ItemInit.MJOLNIR.get().getDefaultInstance())) {
+            if(player.getItemInHand(InteractionHand.MAIN_HAND).sameItemStackIgnoreDurability(ItemInit.MJOLNIR.get().getDefaultInstance())) {
                 if(event.getSource().equals(DamageSource.FALL)) {
                     event.setCanceled(true);
                     player.fallDistance = 0;
@@ -82,13 +81,13 @@ public class EventHandler {
     @SubscribeEvent
     public static void getTimeStone(PlayerInteractEvent.RightClickBlock event) {
         for(int i = 0; i < BlockTags.BEDS.getValues().size(); i++) {
-            PlayerEntity player = event.getPlayer();
-            World level = player.level;
+            Player player = event.getPlayer();
+            Level level = player.level;
             Block clickedBlock = level.getBlockState(event.getPos()).getBlock();
             if(clickedBlock.equals( BlockTags.BEDS.getValues().get(i))) {
 
                 if(level.dimension().equals(DimensionInit.REALITY_DIMENSION)) {
-                    player.inventory.add(ItemInit.TIME_GEM.get().getDefaultInstance());
+                    player.getInventory().add(ItemInit.TIME_GEM.get().getDefaultInstance());
                 }
             }
         }
@@ -97,8 +96,8 @@ public class EventHandler {
 
     @SubscribeEvent
     public static void rightClickEntity(PlayerInteractEvent.EntityInteract event) {
-        PlayerEntity p = event.getPlayer();
-        World level = event.getWorld();
+        Player p = event.getPlayer();
+        Level level = event.getWorld();
         Entity target = event.getTarget();
         ItemStack stack = event.getItemStack();
         if(stack.getItem() == ItemInit.INFINITY_GAUNTLET.get().asItem()) {
@@ -107,7 +106,7 @@ public class EventHandler {
                 stack.getOrCreateTag().get("EntityName");
                 stack.getTag().put("EntityData", target.serializeNBT());
                 stack.getTag().putString("EntityName", target.getName().getString());
-                target.remove();
+                target.remove(Entity.RemovalReason.valueOf("removal_reason.marvel_themod.saved_on_soul_gem"));
                 p.getCooldowns().addCooldown(stack.getItem(), 10);
 
             }

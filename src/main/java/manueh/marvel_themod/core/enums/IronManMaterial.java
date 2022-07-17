@@ -2,16 +2,15 @@ package manueh.marvel_themod.core.enums;
 
 import manueh.marvel_themod.Main;
 import manueh.marvel_themod.core.init.ItemInit;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ArmorMaterial;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.function.Supplier;
 
-public enum IronManMaterial implements IArmorMaterial {
+public enum IronManMaterial implements ArmorMaterial {
     IRONMAN_ARMOR(Main.MODID + ":" + "ironman", 5, new int[] { 4, 7, 9, 4 }, 17, SoundEvents.ARMOR_EQUIP_CHAIN, 4f, 0.2f,
             () -> Ingredient.of(ItemInit.NANOBOT.get())),
     REACTOR(Main.MODID + ":" + "ironman_reactor", 5, new int[] { 4, 7, 9, 4 }, 17, SoundEvents.ARMOR_EQUIP_CHAIN, 4f, 0.2f,
@@ -40,12 +39,12 @@ public enum IronManMaterial implements IArmorMaterial {
     }
 
     @Override
-    public int getDurabilityForSlot(EquipmentSlotType slot) {
+    public int getDurabilityForSlot(EquipmentSlot slot) {
         return baseDurability[slot.getIndex()] * this.durabilityMultiplier;
     }
 
     @Override
-    public int getDefenseForSlot(EquipmentSlotType slot) {
+    public int getDefenseForSlot(EquipmentSlot slot) {
         return this.armorVal[slot.getIndex()];
     }
 

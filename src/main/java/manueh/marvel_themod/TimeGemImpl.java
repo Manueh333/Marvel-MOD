@@ -9,11 +9,11 @@ import java.util.Set;
 
 import manueh.marvel_themod.core.enums.Tier;
 import manueh.marvel_themod.core.enums.TimeGemAPI;
-import net.minecraft.block.Block;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,7 +26,7 @@ public final class TimeGemImpl implements TimeGemAPI {
   
   private final Set<Block> blacklistedBlocks = new HashSet<>();
   
-  private final Set<TileEntityType<?>> blacklistedTiles = new HashSet<>();
+  private final Set<BlockEntityType<?>> blacklistedTiles = new HashSet<>();
   
   private Map<ResourceLocation, Tier> remoteTiers = new HashMap<>();
   
@@ -66,7 +66,7 @@ public final class TimeGemImpl implements TimeGemAPI {
     return blacklistBlockEntity(blockEntityTypeId);
   }
   
-  public boolean blacklistTileEntity(TileEntityType<? extends TileEntity> blockEntityType) {
+  public boolean blacklistTileEntity(BlockEntityType<? extends BlockEntity> blockEntityType) {
     return blacklistBlockEntity(blockEntityType);
   }
   
@@ -74,12 +74,12 @@ public final class TimeGemImpl implements TimeGemAPI {
     return this.blacklistedBlocks.contains(block);
   }
   
-  public boolean isTileEntityBlacklisted(TileEntityType<? extends TileEntity> blockEntityType) {
+  public boolean isTileEntityBlacklisted(BlockEntityType<? extends BlockEntity> blockEntityType) {
     return isBlockEntityBlacklisted(blockEntityType);
   }
   
   public boolean blacklistBlockEntity(ResourceLocation blockEntityTypeId) {
-    Optional<TileEntityType<?>> blockEntityType = Registry.BLOCK_ENTITY_TYPE.getOptional(blockEntityTypeId);
+    Optional<BlockEntityType<?>> blockEntityType = Registry.BLOCK_ENTITY_TYPE.getOptional(blockEntityTypeId);
     if (blockEntityType.isPresent()) {
       if (this.blacklistedTiles.contains(blockEntityType.get())) {
         this.logger.warn("BlockEntityType with id {} is already blacklisted.", blockEntityTypeId);
@@ -92,7 +92,7 @@ public final class TimeGemImpl implements TimeGemAPI {
     return false;
   }
   
-  public boolean blacklistBlockEntity(TileEntityType<?> blockEntityType) {
+  public boolean blacklistBlockEntity(BlockEntityType<?> blockEntityType) {
     if (this.blacklistedTiles.contains(blockEntityType)) {
       this.logger.warn("BlockEntityType with id {} is already blacklisted.", Registry.BLOCK_ENTITY_TYPE.getKey(blockEntityType));
       return false;
@@ -101,7 +101,7 @@ public final class TimeGemImpl implements TimeGemAPI {
     return true;
   }
   
-  public boolean isBlockEntityBlacklisted(TileEntityType<?> blockEntityType) {
+  public boolean isBlockEntityBlacklisted(BlockEntityType<?> blockEntityType) {
     return this.blacklistedTiles.contains(blockEntityType);
   }
   

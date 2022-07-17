@@ -6,17 +6,17 @@ import manueh.marvel_themod.core.init.*;
 import manueh.marvel_themod.core.network.Network;
 import manueh.marvel_themod.world.ModBiomes;
 import manueh.marvel_themod.world.OreGeneration;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,7 +26,7 @@ public class Main
 {
     public static final Logger LOGGER = LogManager.getLogger();
     public static final String MODID = "marvel_themod";
-    public static final ItemGroup GROUP = new MainTab("marvel_themod");
+    public static final CreativeModeTab GROUP = new MainTab("marvel_themod");
     public static SimpleChannel NETWORK;
 
     public static int timer = 0;
@@ -67,7 +67,7 @@ public class Main
     }
 
 
-    public static class MainTab extends ItemGroup {
+    public static class MainTab extends CreativeModeTab {
 
         public MainTab(String label) {
             super(label);

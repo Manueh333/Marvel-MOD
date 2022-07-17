@@ -1,10 +1,10 @@
 package manueh.marvel_themod.world;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.util.ITeleporter;
 
 import java.util.function.Function;
@@ -19,7 +19,7 @@ public class RealityTeleporter implements ITeleporter {
     }
 
     @Override
-    public Entity placeEntity(Entity entity, ServerWorld currentWorld, ServerWorld destinationWorld,
+    public Entity placeEntity(Entity entity, ServerLevel currentWorld, ServerLevel destinationWorld,
                               float yaw, Function<Boolean, Entity> repositionEntity) {
         entity = repositionEntity.apply(false);
         double y = 61;
@@ -49,7 +49,7 @@ public class RealityTeleporter implements ITeleporter {
 
 
 
-        entity.setPosAndOldPos(destinationPos.getX(), destinationPos.getY(), destinationPos.getZ());
+        entity.setPos(destinationPos.getX(), destinationPos.getY(), destinationPos.getZ());
 
         return entity;
     }

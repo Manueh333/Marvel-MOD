@@ -1,44 +1,50 @@
 package manueh.marvel_themod.common.items;
 
+import com.mojang.math.Vector3f;
 import manueh.marvel_themod.Main;
 import manueh.marvel_themod.client.ClientEvents;
 import manueh.marvel_themod.common.blocks.containers.InfinityGauntletCapabilityProvider;
 import manueh.marvel_themod.common.blocks.containers.InfinityGauntletContainer;
 import manueh.marvel_themod.common.blocks.containers.InfinityGauntletItemStackHandler;
-import manueh.marvel_themod.common.entity.PowerGenEntity;
 import manueh.marvel_themod.core.init.BlockInit;
 import manueh.marvel_themod.core.init.DimensionInit;
 import manueh.marvel_themod.core.init.ItemInit;
 import manueh.marvel_themod.world.RealityTeleporter;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.particles.RedstoneParticleData;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.ExplosionDamageCalculator;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
@@ -52,7 +58,7 @@ public class InfinityGauntlet extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> use(World level, PlayerEntity p, Hand hand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player p, InteractionHand hand) {
         ItemStack stack = p.getItemInHand(hand);
         if (p.isShiftKeyDown()) {
 
@@ -165,51 +171,73 @@ public class InfinityGauntlet extends Item {
 
             stack.getTag().putInt("gem", gem);
             if(level.isClientSide) {
-                p.sendMessage(new TranslationTextComponent("item.marvel_themod.infinity_gauntlet.gem_message", getGemName(stack)), Util.NIL_UUID);
+                p.sendMessage(new TranslatableComponent("item.marvel_themod.infinity_gauntlet.gem_message", getGemName(stack)), Util.NIL_UUID);
             }
         }
         else if(getGem(stack) == 1) {
-            ItemStack itemstack = p.getItemInHand(hand);
-            PowerGenEntity entity = new PowerGenEntity(level, p);
-            entity.setItem(new ItemStack(ItemInit.POWER_GEM.get()));
-            entity.shootFromRotation(p, p.xRot, p.yRot, 0.0F, 3F, 1.0F);
-            level.addFreshEntity(entity);
+            Double rayLength = new Double(100);
+            Vec3 playerRotation = p.getViewVector(0);
+            Vec3 rayPath = playerRotation.scale(rayLength);
+
+            //RAY START AND END POINTS
+            Vec3 from = p.getEyePosition(0);
+            Vec3 to = from.add(rayPath);
+
+            //CREATE THE RAY
+            ClipContext rayCtx = new ClipContext(from, to, ClipContext.Block.OUTLINE, ClipContext.Fluid.ANY, null);
+            //CAST THE RAY
+            BlockHitResult rayHit = level.clip(rayCtx);
+
+            //CHECK THE RESULTS
+            if (rayHit.getType() == HitResult.Type.MISS){
+                //IF RAY MISSED
+            }
+            else {
+                //IF RAY HIT SOMETHING
+                Vec3 hitLocation = rayHit.getLocation();
+                level.explode(null,new DamageSource("damage.marvel_themod.infinity_gauntlet"), (ExplosionDamageCalculator) null,(double) hitLocation.x, (double)hitLocation.y, (double) hitLocation.z, 2.0F, false, Explosion.BlockInteraction.DESTROY);
+
+
+                p.getCooldowns().addCooldown(this, 10);
+                // ItemStack stack = player.getItemInHand(hand);
+                // stack.setDamageValue(stack.getDamageValue() + 1);
+
+                // break if durability gets to 0
+                // if (stack.getDamageValue() == 0) stack.setCount(0);
+
+
+
+            }
             p.getCooldowns().addCooldown(this, 10);
 
         }else if(getGem(stack) == 2) {
             if(p != null) {
                     //RAY END POINT - TO WHERE IT WILL TRAVEL TO
                     Double rayLength = new Double(100);
-                    Vector3d playerRotation = p.getViewVector(0);
-                    Vector3d rayPath = playerRotation.scale(rayLength);
+                    Vec3 playerRotation = p.getViewVector(0);
+                    Vec3 rayPath = playerRotation.scale(rayLength);
 
                     //RAY START AND END POINTS
-                    Vector3d from = p.getEyePosition(0);
-                    Vector3d to = from.add(rayPath);
+                    Vec3 from = p.getEyePosition(0);
+                    Vec3 to = from.add(rayPath);
 
                     //CREATE THE RAY
-                    RayTraceContext rayCtx = new RayTraceContext(from, to, RayTraceContext.BlockMode.OUTLINE, RayTraceContext.FluidMode.ANY, null);
+                    ClipContext rayCtx = new ClipContext(from, to, ClipContext.Block.OUTLINE, ClipContext.Fluid.ANY, null);
                     //CAST THE RAY
-                    BlockRayTraceResult rayHit = level.clip(rayCtx);
+                    BlockHitResult rayHit = level.clip(rayCtx);
 
                     //CHECK THE RESULTS
-                    if (rayHit.getType() == RayTraceResult.Type.MISS){
+                    if (rayHit.getType() == HitResult.Type.MISS){
                         //IF RAY MISSED
                     }
                     else {
                         //IF RAY HIT SOMETHING
-                        Vector3d hitLocation = rayHit.getLocation();
+                        Vec3 hitLocation = rayHit.getLocation();
                         p.teleportTo(hitLocation.x, hitLocation.y,hitLocation.z);
                         animateTeleport(level, p);
 
 
                         p.getCooldowns().addCooldown(this, 10);
-                        // ItemStack stack = player.getItemInHand(hand);
-                        // stack.setDamageValue(stack.getDamageValue() + 1);
-
-                        // break if durability gets to 0
-                        // if (stack.getDamageValue() == 0) stack.setCount(0);
-
 
 
                     }
@@ -222,12 +250,12 @@ public class InfinityGauntlet extends Item {
 
                 if (server != null) {
                     if (level.dimension() == DimensionInit.REALITY_DIMENSION) {
-                        ServerWorld overWorld = server.getLevel(World.OVERWORLD);
+                        ServerLevel overWorld = server.getLevel(Level.OVERWORLD);
                         if (overWorld != null) {
                             p.changeDimension(overWorld, new RealityTeleporter(new BlockPos(p.position()), false));
                         }
                     } else {
-                        ServerWorld realityDim = server.getLevel(DimensionInit.REALITY_DIMENSION);
+                        ServerLevel realityDim = server.getLevel(DimensionInit.REALITY_DIMENSION);
                         if (realityDim != null) {
                             p.changeDimension(realityDim, new RealityTeleporter(new BlockPos(p.position()), true));
                         }
@@ -238,7 +266,7 @@ public class InfinityGauntlet extends Item {
             }
         }
 
-            return ActionResult.success(stack);
+            return InteractionResultHolder.success(stack);
     }
 
 
@@ -278,7 +306,7 @@ public class InfinityGauntlet extends Item {
 
 
 
-    public void animateTeleport(World level, PlayerEntity p) {
+    public void animateTeleport(Level level, Player p) {
         Main.timer = 0;
         Main.makeTeleportAnimation = true;
     }
@@ -286,17 +314,17 @@ public class InfinityGauntlet extends Item {
 
 
     @Override
-    public ActionResultType useOn(ItemUseContext context) {
-        World world = context.getLevel();
+    public InteractionResult useOn(UseOnContext context) {
+        Level world = context.getLevel();
         ItemStack stack = context.getItemInHand();
-        PlayerEntity player = context.getPlayer();
+        Player player = context.getPlayer();
         if(getGem(context.getItemInHand()) == 0) {
             BlockPos blockpos = context.getClickedPos();
             BlockPos blockpos1 = blockpos.relative(context.getClickedFace());
             world.setBlockAndUpdate(blockpos1, BlockInit.TIME_GEM_BLOCK.get().defaultBlockState());
             getBackpackItemStackHandler(stack).extractItem(0, 1, false);
             stack.getTag().putInt("gem", 6);
-                return ActionResultType.sidedSuccess(world.isClientSide);
+                return InteractionResult.sidedSuccess(world.isClientSide);
 
 
         }else if(getGem(stack) == 3) {
@@ -306,92 +334,29 @@ public class InfinityGauntlet extends Item {
 
                     if (server != null) {
                         if (world.dimension() == DimensionInit.REALITY_DIMENSION) {
-                            ServerWorld overWorld = server.getLevel(World.OVERWORLD);
+                            ServerLevel overWorld = server.getLevel(Level.OVERWORLD);
                             if (overWorld != null) {
                                 player.changeDimension(overWorld, new RealityTeleporter(new BlockPos(player.position()), false));
                             }
                         } else {
-                            ServerWorld realityDim = server.getLevel(DimensionInit.REALITY_DIMENSION);
+                            ServerLevel realityDim = server.getLevel(DimensionInit.REALITY_DIMENSION);
                             if (realityDim != null) {
                                 player.changeDimension(realityDim, new RealityTeleporter(new BlockPos(player.position()), true));
                             }
                         }
-                        return ActionResultType.SUCCESS;
+                        return InteractionResult.SUCCESS;
                     }
 
             }
 
 
-          /*  if(world.isRaining()) {
-                world.setRainLevel(0);
-            }else {
-                world.setRainLevel(2);
-
-            }*/
-           /* if(!context.getLevel().isClientSide()) {
-
-                ArrayList<Block> changeBlocks = new ArrayList<Block>();
-                changeBlocks.add(Blocks.STONE);
-                changeBlocks.add(Blocks.GRASS_BLOCK);
-                changeBlocks.add(Blocks.SAND);
-                changeBlocks.add(Blocks.DIRT);
-                changeBlocks.add(Blocks.GRASS_PATH);
-                changeBlocks.add(Blocks.ANDESITE);
-                changeBlocks.add(Blocks.DIORITE);
-                changeBlocks.add(Blocks.GRANITE);
-
-
-                context.getPlayer().getCooldowns().addCooldown(this, 10);
-               /* world.setBlockAndUpdate(context.getClickedPos(), BlockInit.CORRUPTED_BLOCK.get().defaultBlockState());
-
-                for(int x = -8; x<8; x++) {
-                    if(world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, 0, 0) )) != Blocks.AIR.defaultBlockState() && world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, 0, 0) )) != Blocks.CAVE_AIR.defaultBlockState() && world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, 0, 0) )) != Blocks.VOID_AIR.defaultBlockState()) {
-                        world.setBlockAndUpdate(context.getClickedPos().subtract(new Vector3i(x, 0, 0)), BlockInit.CORRUPTED_BLOCK.get().defaultBlockState());
-                    }
-                    for(int y = -8; y<8; y++) {
-                        if(world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, y, 0) )) != Blocks.AIR.defaultBlockState() && world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, y, 0) )) != Blocks.CAVE_AIR.defaultBlockState() && world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, y, 0) )) != Blocks.VOID_AIR.defaultBlockState()) {
-                            world.setBlockAndUpdate(context.getClickedPos().subtract(new Vector3i(x, y, 0)), BlockInit.CORRUPTED_BLOCK.get().defaultBlockState());
-                        }
-                        for(int z = -8; z<8; z++) {
-                            if(world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, y, z) )) != Blocks.AIR.defaultBlockState() && world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, y, z) )) != Blocks.CAVE_AIR.defaultBlockState() && world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, y, z) )) != Blocks.VOID_AIR.defaultBlockState()) {
-                                world.setBlockAndUpdate(context.getClickedPos().subtract(new Vector3i(x, y, z)), BlockInit.CORRUPTED_BLOCK.get().defaultBlockState());
-                            }
-                        }
-                    }
-                }
-
-
-                if(stack.getOrCreateTag().getInt("reality_gem_type") == 0) {
-                    world.setBlockAndUpdate(context.getClickedPos(), Blocks.END_STONE.defaultBlockState());
-
-                    for(int x = -8; x<8; x++) {
-                        if(world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, 0, 0) )) != Blocks.AIR.defaultBlockState() && world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, 0, 0) )) != Blocks.CAVE_AIR.defaultBlockState() && world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, 0, 0) )) != Blocks.VOID_AIR.defaultBlockState() &&  changeBlocks.contains(world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, 0, 0) )).getBlock())) {
-                            world.setBlockAndUpdate(context.getClickedPos().subtract(new Vector3i(x, 0, 0)), Blocks.END_STONE.defaultBlockState());
-                        }
-                        for(int y = -8; y<8; y++) {
-                            if(world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, y, 0) )) != Blocks.AIR.defaultBlockState() && world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, y, 0) )) != Blocks.CAVE_AIR.defaultBlockState() && world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, y, 0) )) != Blocks.VOID_AIR.defaultBlockState() &&  changeBlocks.contains(world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, y, 0) )).getBlock())) {
-                                world.setBlockAndUpdate(context.getClickedPos().subtract(new Vector3i(x, y, 0)), Blocks.END_STONE.defaultBlockState());
-                            }
-                            for(int z = -8; z<8; z++) {
-                                if(world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, y, z) )) != Blocks.AIR.defaultBlockState() && world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, y, z) )) != Blocks.CAVE_AIR.defaultBlockState()
-                                        && world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, y, z) )) != Blocks.VOID_AIR.defaultBlockState() &&  changeBlocks.contains(world.getBlockState(context.getClickedPos().subtract(new Vector3i(x, y, z) )).getBlock())
-                                        ) {
-                                    world.setBlockAndUpdate(context.getClickedPos().subtract(new Vector3i(x, y, z)), Blocks.END_STONE.defaultBlockState());
-                                }
-                            }
-                        }
-                    }
-                }
-
-            }*/
-
         }
         else if(getGem(stack) == 4) {
-            CompoundNBT entityData = (CompoundNBT) stack.getTag().get("EntityData");
+            CompoundTag entityData = (CompoundTag) stack.getTag().get("EntityData");
             if(entityData != null) {
                 Entity entity = EntityType.create(entityData, world).get();
-                if(entity instanceof PlayerEntity) {
-                    return ActionResultType.FAIL;
+                if(entity instanceof Player) {
+                    return InteractionResult.FAIL;
                 }
                 entity.setPos(context.getClickedPos().getX() + 0.5f, context.getClickedPos().getY() + 1f, context.getClickedPos().getZ() + 0.5f);
                 world.addFreshEntity(entity);
@@ -403,11 +368,11 @@ public class InfinityGauntlet extends Item {
 
 
         }
-        return ActionResultType.sidedSuccess(world.isClientSide);
+        return InteractionResult.sidedSuccess(world.isClientSide);
     }
 
     @Nullable
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         return new InfinityGauntletCapabilityProvider();
     }
 
@@ -421,36 +386,36 @@ public class InfinityGauntlet extends Item {
     }
 
     @Nullable
-    public CompoundNBT getShareTag(ItemStack stack) {
-        CompoundNBT baseTag = stack.getTag();
+    public CompoundTag getShareTag(ItemStack stack) {
+        CompoundTag baseTag = stack.getTag();
         InfinityGauntletItemStackHandler backpackItemStackHandler = getBackpackItemStackHandler(stack);
-        CompoundNBT capTag = backpackItemStackHandler.serializeNBT();
-        CompoundNBT combinedTag = new CompoundNBT();
+        CompoundTag capTag = backpackItemStackHandler.serializeNBT();
+        CompoundTag combinedTag = new CompoundTag();
         if (baseTag != null)
-            combinedTag.put("base", (INBT)baseTag);
+            combinedTag.put("base", (Tag)baseTag);
         if (capTag != null)
-            combinedTag.put("cap", (INBT)capTag);
+            combinedTag.put("cap", (Tag)capTag);
         return combinedTag;
     }
 
-    public void readShareTag(ItemStack stack, @Nullable CompoundNBT nbt) {
+    public void readShareTag(ItemStack stack, @Nullable CompoundTag nbt) {
         if (nbt == null) {
             stack.setTag(null);
             return;
         }
-        CompoundNBT baseTag = nbt.getCompound("base");
+        CompoundTag baseTag = nbt.getCompound("base");
         stack.setTag(baseTag);
-        CompoundNBT capTag = nbt.getCompound("cap");
+        CompoundTag capTag = nbt.getCompound("cap");
         InfinityGauntletItemStackHandler backpackItemStackHandler = getBackpackItemStackHandler(stack);
         backpackItemStackHandler.deserializeNBT(capTag);
     }
 
-    public void openGUI(InfinityGauntlet gauntlet, ItemStack stack, PlayerEntity player) {
-        INamedContainerProvider ncp = new InfinityGauntletContainerProvider(this, stack);
-        NetworkHooks.openGui((ServerPlayerEntity)player, ncp);
+    public void openGUI(InfinityGauntlet gauntlet, ItemStack stack, Player player) {
+        MenuProvider ncp = new InfinityGauntletContainerProvider(this, stack);
+        NetworkHooks.openGui((ServerPlayer)player, ncp);
     }
 
-    public static class InfinityGauntletContainerProvider implements INamedContainerProvider {
+    public static class InfinityGauntletContainerProvider implements MenuProvider {
         private final InfinityGauntlet backpackItem;
 
         private final ItemStack backpackStack;
@@ -463,24 +428,24 @@ public class InfinityGauntlet extends Item {
         }
 
         @Nullable
-        public Container createMenu(int windowId, PlayerInventory playerInv, PlayerEntity player) {
+        public AbstractContainerMenu createMenu(int windowId, Inventory playerInv, Player player) {
             return new InfinityGauntletContainer(windowId, playerInv, this.backpackItem
 
                     .getBackpackItemStackHandler(this.backpackStack), this.backpackStack);
         }
 
         @Override
-        public ITextComponent getDisplayName() {
-            return (ITextComponent) new TranslationTextComponent("container.marvel_themod.infinity_gauntlet");
+        public Component getDisplayName() {
+            return (Component) new TranslatableComponent("container.marvel_themod.infinity_gauntlet");
         }
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable World level, List<ITextComponent> tooltip, ITooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
-        tooltip.add(new TranslationTextComponent("item.marvel_themod.infinity_gauntlet.current.gem", getGemName(stack)));
+        tooltip.add(new TranslatableComponent("item.marvel_themod.infinity_gauntlet.current.gem", getGemName(stack)));
         if(getGem(stack) == 4 && stack.getTag().getString("EntityName") != null) {
-            tooltip.add(new TranslationTextComponent("item.marvel_themod.infinity_gauntlet.current.entity", stack.getTag().getString("EntityName")));
+            tooltip.add(new TranslatableComponent("item.marvel_themod.infinity_gauntlet.current.entity", stack.getTag().getString("EntityName")));
 
         }
 
@@ -493,11 +458,11 @@ public class InfinityGauntlet extends Item {
         boolean sneakPressed = Screen.hasShiftDown();
 
         if(sneakPressed) {
-            tooltip.add(new TranslationTextComponent("tooltip.marvel_themod.infinity_gauntlet_1"));
+            tooltip.add(new TranslatableComponent("tooltip.marvel_themod.infinity_gauntlet_1"));
 
-            tooltip.add(new TranslationTextComponent("tooltip.marvel_themod.infinity_gauntlet_second_" + getGem(stack), ClientEvents.keyOpenGauntlet.getKey().getDisplayName()));
+            tooltip.add(new TranslatableComponent("tooltip.marvel_themod.infinity_gauntlet_second_" + getGem(stack), ClientEvents.keyOpenGauntlet.getKey().getDisplayName()));
         }else {
-            tooltip.add(new TranslationTextComponent("tooltip.marvel_themod.hold_shift"));
+            tooltip.add(new TranslatableComponent("tooltip.marvel_themod.hold_shift"));
         }
     }
 
@@ -520,41 +485,41 @@ public class InfinityGauntlet extends Item {
         stack.getOrCreateTag().putBoolean("hasGem." + gem, false);
     }
 
-    public TranslationTextComponent getGemName(ItemStack stack) {
+    public TranslatableComponent getGemName(ItemStack stack) {
 
         int gem = (int) getGem(stack);
         if(gem == 0) {
-            return new TranslationTextComponent("marvel_themod.time.gem");
+            return new TranslatableComponent("marvel_themod.time.gem");
         }
         else if(gem == 1) {
-            return new TranslationTextComponent("marvel_themod.power.gem");
+            return new TranslatableComponent("marvel_themod.power.gem");
         }else if(gem == 2) {
-            return new TranslationTextComponent("marvel_themod.space.gem");
+            return new TranslatableComponent("marvel_themod.space.gem");
         }else if(gem == 3) {
-            return new TranslationTextComponent("marvel_themod.reality.gem");
+            return new TranslatableComponent("marvel_themod.reality.gem");
         }else if(gem == 4) {
-            return new TranslationTextComponent("marvel_themod.soul.gem");
+            return new TranslatableComponent("marvel_themod.soul.gem");
         }else if(gem == 5) {
-            return new TranslationTextComponent("marvel_themod.mind.gem");
+            return new TranslatableComponent("marvel_themod.mind.gem");
         }
 
-        return new TranslationTextComponent("marvel_themod.any.gem");
+        return new TranslatableComponent("marvel_themod.any.gem");
     }
 
 
-    public void particleAnimation(World level, PlayerEntity player) {
-        level.addParticle(new RedstoneParticleData( 255, 255, 255,1), player.getX(), player.getY(), player.getZ(), 0, 0, 0);
+    public void particleAnimation(Level level, Player player) {
+        level.addParticle(new DustParticleOptions( new Vector3f(255, 255, 255), 1), player.getX(), player.getY(), player.getZ(), 0, 0, 0);
 
     }
 
 
-    public void setTag(String name, CompoundNBT compoundNBT, ItemStack stack) {
+    public void setTag(String name, CompoundTag compoundNBT, ItemStack stack) {
         stack.getTag().put("EntityData", compoundNBT);
 
     }
 
 
-    public INBT getTag(String name, ItemStack stack) {
+    public Tag getTag(String name, ItemStack stack) {
         return stack.getOrCreateTag().get(name);
     }
 
@@ -564,7 +529,7 @@ public class InfinityGauntlet extends Item {
     }
 
 
-    public void inventoryTick(ItemStack stack, World p_77663_2_, Entity p_77663_3_, int p_77663_4_, boolean p_77663_5_) {
+    public void inventoryTick(ItemStack stack, Level p_77663_2_, Entity p_77663_3_, int p_77663_4_, boolean p_77663_5_) {
         hasGemInInventory(stack);
         if(!hasGem(stack, stack.getTag().getInt("gem"))) {
             stack.getTag().putInt("gem", 6);

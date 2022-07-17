@@ -2,10 +2,10 @@ package manueh.marvel_themod.core.enums;
 
 import com.google.common.collect.ImmutableMap;
 import manueh.marvel_themod.TimeGemImpl;
-import net.minecraft.block.Block;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.resources.ResourceLocation;
 
 
 public interface TimeGemAPI {
@@ -23,16 +23,16 @@ public interface TimeGemAPI {
   boolean blacklistTileEntity(ResourceLocation paramResourceLocation);
   
   @Deprecated
-  boolean blacklistTileEntity(TileEntityType<? extends TileEntity> paramTileEntityType);
+  boolean blacklistTileEntity(BlockEntityType<? extends BlockEntity> paramTileEntityType);
   
   boolean isBlockBlacklisted(Block paramBlock);
   
   @Deprecated
-  boolean isTileEntityBlacklisted(TileEntityType<? extends TileEntity> paramTileEntityType);
+  boolean isTileEntityBlacklisted(BlockEntityType<? extends BlockEntity> paramTileEntityType);
   
   boolean blacklistBlockEntity(ResourceLocation paramResourceLocation);
   
-  boolean blacklistBlockEntity(TileEntityType<?> paramTileEntityType);
+  boolean blacklistBlockEntity(BlockEntityType<?> paramTileEntityType);
   
-  boolean isBlockEntityBlacklisted(TileEntityType<?> paramTileEntityType);
+  boolean isBlockEntityBlacklisted(BlockEntityType<?> paramTileEntityType);
 }

@@ -1,29 +1,36 @@
 package manueh.marvel_themod.common.items;
 
 import java.util.function.Predicate;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.enchantment.IVanishable;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.item.*;
-import net.minecraft.stats.Stats;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.world.World;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.Vanishable;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 
-public class HawkEyeBow extends ShootableItem implements IVanishable {
+import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.Level;
+
+import net.minecraft.world.item.ArrowItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ProjectileWeaponItem;
+import net.minecraft.world.item.UseAnim;
+
+public class HawkEyeBow extends ProjectileWeaponItem implements Vanishable {
     public HawkEyeBow(Item.Properties p_i48522_1_) {
         super(p_i48522_1_);
     }
 
-    public void releaseUsing(ItemStack p_77615_1_, World p_77615_2_, LivingEntity p_77615_3_, int p_77615_4_) {
-        if (p_77615_3_ instanceof PlayerEntity) {
-            PlayerEntity playerentity = (PlayerEntity)p_77615_3_;
-            boolean flag = playerentity.abilities.instabuild || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, p_77615_1_) > 0;
+    public void releaseUsing(ItemStack p_77615_1_, Level p_77615_2_, LivingEntity p_77615_3_, int p_77615_4_) {
+        if (p_77615_3_ instanceof Player) {
+            Player playerentity = (Player)p_77615_3_;
+            boolean flag = playerentity.getAbilities().instabuild || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, p_77615_1_) > 0;
             ItemStack itemstack = playerentity.getProjectile(p_77615_1_);
 
             int i = this.getUseDuration(p_77615_1_) - p_77615_4_;
@@ -37,12 +44,12 @@ public class HawkEyeBow extends ShootableItem implements IVanishable {
 
                 float f = getPowerForTime(i);
                 if (!((double)f < 0.1D)) {
-                    boolean flag1 = playerentity.abilities.instabuild || (itemstack.getItem() instanceof ArrowItem && ((ArrowItem)itemstack.getItem()).isInfinite(itemstack, p_77615_1_, playerentity));
+                    boolean flag1 = playerentity.getAbilities().instabuild || (itemstack.getItem() instanceof ArrowItem && ((ArrowItem)itemstack.getItem()).isInfinite(itemstack, p_77615_1_, playerentity));
                     if (!p_77615_2_.isClientSide) {
                         ArrowItem arrowitem = (ArrowItem)(itemstack.getItem() instanceof ArrowItem ? itemstack.getItem() : Items.ARROW);
-                        AbstractArrowEntity abstractarrowentity = arrowitem.createArrow(p_77615_2_, itemstack, playerentity);
+                        AbstractArrow abstractarrowentity = arrowitem.createArrow(p_77615_2_, itemstack, playerentity);
                         abstractarrowentity = customArrow(abstractarrowentity);
-                        abstractarrowentity.shootFromRotation(playerentity, playerentity.xRot, playerentity.yRot, 0.0F, f * 3.0F, 1.0F);
+                        abstractarrowentity.shootFromRotation(playerentity, playerentity.xRotO, playerentity.yRotO, 0.0F, f * 3.0F, 1.0F);
                         if (f == 1.0F) {
                             abstractarrowentity.setCritArrow(true);
                         }
@@ -64,18 +71,18 @@ public class HawkEyeBow extends ShootableItem implements IVanishable {
                         p_77615_1_.hurtAndBreak(1, playerentity, (p_220009_1_) -> {
                             p_220009_1_.broadcastBreakEvent(playerentity.getUsedItemHand());
                         });
-                        if (flag1 || playerentity.abilities.instabuild && (itemstack.getItem() == Items.SPECTRAL_ARROW || itemstack.getItem() == Items.TIPPED_ARROW)) {
-                            abstractarrowentity.pickup = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
+                        if (flag1 || playerentity.getAbilities().instabuild && (itemstack.getItem() == Items.SPECTRAL_ARROW || itemstack.getItem() == Items.TIPPED_ARROW)) {
+                            abstractarrowentity.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                         }
 
                         p_77615_2_.addFreshEntity(abstractarrowentity);
                     }
 
-                    p_77615_2_.playSound((PlayerEntity)null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), SoundEvents.ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
-                    if (!flag1 && !playerentity.abilities.instabuild) {
+                    p_77615_2_.playSound((Player)null, playerentity.getX(), playerentity.getY(), playerentity.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    if (!flag1 && !playerentity.getAbilities().instabuild) {
                         itemstack.shrink(1);
                         if (itemstack.isEmpty()) {
-                            playerentity.inventory.removeItem(itemstack);
+                            playerentity.getInventory().removeItem(itemstack);
                         }
                     }
 
@@ -99,22 +106,22 @@ public class HawkEyeBow extends ShootableItem implements IVanishable {
         return 72000;
     }
 
-    public UseAction getUseAnimation(ItemStack p_77661_1_) {
-        return UseAction.BOW;
+    public UseAnim getUseAnimation(ItemStack p_77661_1_) {
+        return UseAnim.BOW;
     }
 
-    public ActionResult<ItemStack> use(World p_77659_1_, PlayerEntity p_77659_2_, Hand p_77659_3_) {
+    public InteractionResultHolder<ItemStack> use(Level p_77659_1_, Player p_77659_2_, InteractionHand p_77659_3_) {
         ItemStack itemstack = p_77659_2_.getItemInHand(p_77659_3_);
         boolean flag = !p_77659_2_.getProjectile(itemstack).isEmpty();
 
-        ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemstack, p_77659_1_, p_77659_2_, p_77659_3_, flag);
+        InteractionResultHolder<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemstack, p_77659_1_, p_77659_2_, p_77659_3_, flag);
         if (ret != null) return ret;
 
-        if (!p_77659_2_.abilities.instabuild && !flag) {
-            return ActionResult.fail(itemstack);
+        if (!p_77659_2_.getAbilities().instabuild && !flag) {
+            return InteractionResultHolder.fail(itemstack);
         } else {
             p_77659_2_.startUsingItem(p_77659_3_);
-            return ActionResult.consume(itemstack);
+            return InteractionResultHolder.consume(itemstack);
         }
     }
 
@@ -122,7 +129,7 @@ public class HawkEyeBow extends ShootableItem implements IVanishable {
         return ARROW_ONLY;
     }
 
-    public AbstractArrowEntity customArrow(AbstractArrowEntity arrow) {
+    public AbstractArrow customArrow(AbstractArrow arrow) {
         return arrow;
     }
 

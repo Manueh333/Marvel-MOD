@@ -2,8 +2,7 @@ package manueh.marvel_themod.common.blocks.containers;
 
 import manueh.marvel_themod.common.items.InfinityGauntlet;
 import manueh.marvel_themod.core.init.ItemInit;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 
 
