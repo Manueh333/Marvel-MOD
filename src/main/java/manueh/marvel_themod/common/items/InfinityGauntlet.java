@@ -529,13 +529,13 @@ public class InfinityGauntlet extends Item {
     }
 
 
-    public void inventoryTick(ItemStack stack, Level p_77663_2_, Entity p_77663_3_, int p_77663_4_, boolean p_77663_5_) {
+   /* public void inventoryTick(ItemStack stack, Level p_77663_2_, Entity p_77663_3_, int p_77663_4_, boolean p_77663_5_) {
         hasGemInInventory(stack);
         if(!hasGem(stack, stack.getTag().getInt("gem"))) {
             stack.getTag().putInt("gem", 6);
         }
 
 
-    }
+    }*/
 
 }
