@@ -3,9 +3,9 @@ package manueh.marvel_themod.core.init;
 import manueh.marvel_themod.Main;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 public class ParticlesInit {
     public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES =

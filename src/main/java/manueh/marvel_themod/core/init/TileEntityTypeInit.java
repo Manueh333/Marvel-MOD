@@ -1,15 +1,11 @@
 package manueh.marvel_themod.core.init;
 
 import manueh.marvel_themod.Main;
-import manueh.marvel_themod.common.blocks.TimeGemBlock;
 import manueh.marvel_themod.common.entity.TimeGemBlockEntity;
-import manueh.marvel_themod.core.enums.TimeGemBlockEntityType;
-
 import net.minecraft.world.level.block.entity.BlockEntityType;
-
-import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 public class TileEntityTypeInit {
 

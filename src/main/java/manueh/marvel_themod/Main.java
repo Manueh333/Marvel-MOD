@@ -21,6 +21,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
+import SimpleChannel;
+
 @Mod(Main.MODID)
 public class Main
 {

@@ -7,6 +7,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import java.util.function.Supplier;
 
+import net.minecraft.world.level.block.entity.BlockEntityType.BlockEntitySupplier;
+
 @Deprecated
 public class TimeGemBlockEntityType extends BlockEntityType<TimeGemBlockEntity> {
   public TimeGemBlockEntityType(BlockEntitySupplier<TimeGemBlockEntity> supplier, Type type) {

@@ -19,6 +19,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class mjolnir extends SwordItem {
 
     public mjolnir(Tier tier, int damage, float speed, Properties properties) {

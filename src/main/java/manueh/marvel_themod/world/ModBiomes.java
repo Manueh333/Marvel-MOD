@@ -16,6 +16,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.function.Supplier;
 
+import RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
+
 public class ModBiomes {
     public static final DeferredRegister<Biome> BIOMES
             = DeferredRegister.create(ForgeRegistries.BIOMES, Main.MODID);

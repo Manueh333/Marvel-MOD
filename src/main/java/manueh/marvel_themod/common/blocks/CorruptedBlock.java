@@ -16,6 +16,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Random;
 
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 public class CorruptedBlock extends Block {
 
     public CorruptedBlock(Properties p_i48440_1_) {

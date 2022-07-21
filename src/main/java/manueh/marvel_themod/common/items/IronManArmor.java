@@ -24,6 +24,8 @@ import software.bernie.geckolib3.item.GeoArmorItem;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.world.item.Item.Properties;
+
 public class IronManArmor extends GeoArmorItem implements IAnimatable  {
     private AnimationFactory factory = new AnimationFactory(this);
 

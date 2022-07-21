@@ -1,12 +1,14 @@
 package manueh.marvel_themod.core.network;
 
+
 import manueh.marvel_themod.Main;
 import manueh.marvel_themod.core.network.message.InputMessage;
 import manueh.marvel_themod.core.network.message.PacketChangeArmorEntity;
 import manueh.marvel_themod.core.network.message.PacketDamageEntity;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fmllegacy.network.NetworkRegistry;
-import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
+
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.simple.SimpleChannel;
 
 public class Network {
 

@@ -10,6 +10,8 @@ import net.minecraft.world.level.levelgen.surfacebuilders.SurfaceBuilder;
 import net.minecraft.world.level.levelgen.surfacebuilders.SurfaceBuilderBaseConfiguration;
 
 
+import ConfiguredSurfaceBuilder;
+
 public class ModConfiguredSurfaceBuilders {
     public static ConfiguredSurfaceBuilder<?> REALITY_SURFACE = register("reality_surface",
             SurfaceBuilder.DEFAULT.configured(new SurfaceBuilderBaseConfiguration(

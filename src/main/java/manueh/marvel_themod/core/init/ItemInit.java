@@ -4,14 +4,12 @@ import manueh.marvel_themod.Main;
 import manueh.marvel_themod.common.items.*;
 import manueh.marvel_themod.core.enums.IronManMaterial;
 import net.minecraft.world.entity.EquipmentSlot;
-
-import net.minecraftforge.fmllegacy.RegistryObject;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tiers;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 public class ItemInit {
 

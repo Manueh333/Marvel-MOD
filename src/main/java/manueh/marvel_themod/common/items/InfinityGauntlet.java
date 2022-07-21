@@ -51,7 +51,9 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class InfinityGauntlet extends Item {
+import net.minecraft.world.item.Item.Properties;
+
+public class InfinityGauntlet extends Item implements MenuProvider{
     public InfinityGauntlet(Properties properties) {
         super(properties);
 
@@ -413,6 +415,17 @@ public class InfinityGauntlet extends Item {
     public void openGUI(InfinityGauntlet gauntlet, ItemStack stack, Player player) {
         MenuProvider ncp = new InfinityGauntletContainerProvider(this, stack);
         NetworkHooks.openGui((ServerPlayer)player, ncp);
+    }
+
+    @Override
+    public Component getDisplayName() {
+        return new TranslatableComponent("container.marvel_themod.infinity_gauntlet");
+    }
+
+    @Nullable
+    @Override
+    public AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
+        return new InfinityGauntletContainer(p_39954_, p_39955_, new InfinityGauntletItemStackHandler(), p_39956_.getMainHandItem());
     }
 
     public static class InfinityGauntletContainerProvider implements MenuProvider {

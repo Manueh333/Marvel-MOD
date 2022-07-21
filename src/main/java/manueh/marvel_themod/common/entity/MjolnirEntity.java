@@ -19,6 +19,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import net.minecraft.world.entity.Entity.RemovalReason;
+
 public class MjolnirEntity extends ThrowableItemProjectile {
 
     public MjolnirEntity(Level p_i1780_1_, LivingEntity p_i1780_2_) {
